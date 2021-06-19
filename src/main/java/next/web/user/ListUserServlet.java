@@ -24,7 +24,7 @@ public class ListUserServlet extends HttpServlet {
     var session = req.getSession();
 
     if (isEmpty(session.getAttribute("user"))) {
-      resp.sendRedirect("/user/login.html");
+      resp.sendRedirect("/user/login.jsp");
       return;
     }
 

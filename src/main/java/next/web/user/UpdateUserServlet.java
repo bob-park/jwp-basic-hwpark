@@ -24,7 +24,7 @@ public class UpdateUserServlet extends HttpServlet {
       throws ServletException, IOException {
 
     if (isEmpty(req.getSession().getAttribute("user"))) {
-      resp.sendRedirect("/user/login.html");
+      resp.sendRedirect("/user/login.jsp");
 
       return;
     }

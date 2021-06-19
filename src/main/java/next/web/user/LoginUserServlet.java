@@ -33,6 +33,6 @@ public class LoginUserServlet extends HttpServlet {
       return;
     }
 
-    resp.sendRedirect("/user/login_failed.html");
+    resp.sendRedirect("/user/login_failed.jsp");
   }
 }

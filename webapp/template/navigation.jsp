@@ -1,26 +1,18 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: hwpark
+  Date: 2021/06/19
+  Time: 4:26 오후
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-
-<!DOCTYPE html>
-<html lang="kr">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-    <title>SLiPP Java Web Programming</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <!--[if lt IE 9]>
-    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <link href="../css/styles.css" rel="stylesheet">
-</head>
-<body>
 <nav class="navbar navbar-fixed-top header">
     <div class="col-md-12">
         <div class="navbar-header">
 
-            <a href="../index.jsp" class="navbar-brand">SLiPP</a>
+            <a href="/" class="navbar-brand">SLiPP</a>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse1">
                 <i class="glyphicon glyphicon-search"></i>
             </button>
@@ -44,7 +36,7 @@
                         <li><a href="https://facebook.com" target="_blank">Facebook</a></li>
                     </ul>
                 </li>
-                <li><a href="../user/list.html"><i class="glyphicon glyphicon-user"></i></a></li>
+                <li><a href="/user/list"><i class="glyphicon glyphicon-user"></i></a></li>
             </ul>
         </div>
     </div>
@@ -56,7 +48,7 @@
                data-toggle="dropdown"><i class="glyphicon glyphicon-home" style="color:#dd1111;"></i> Home <small><i
                     class="glyphicon glyphicon-chevron-down"></i></small></a>
             <ul class="nav dropdown-menu">
-                <li><a href="profile.jsp"><i class="glyphicon glyphicon-user" style="color:#1111dd;"></i>
+                <li><a href="../user/profile.jsp"><i class="glyphicon glyphicon-user" style="color:#1111dd;"></i>
                     Profile</a></li>
                 <li class="nav-divider"></li>
                 <li><a href="#"><i class="glyphicon glyphicon-cog" style="color:#dd1111;"></i> Settings</a></li>
@@ -79,37 +71,3 @@
         </div>
     </div>
 </div>
-
-<div class="container" id="main">
-    <div class="col-md-6 col-md-offset-3">
-        <div class="panel panel-default content-main">
-            <form name="question" method="post" action="/user/update">
-                <div class="form-group">
-                    <label for="userId">사용자 아이디</label>
-                    <input class="form-control" id="userId" name="userId" placeholder="User ID" value="${user.userId}"
-                           hidden>
-                </div>
-                <div class="form-group">
-                    <label for="password">비밀번호</label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder="Password"
-                           value="${user.password}">
-                </div>
-                <div class="form-group">
-                    <label for="name">이름</label>
-                    <input class="form-control" id="name" name="name" placeholder="Name" value="${user.name}">
-                </div>
-                <div class="form-group">
-                    <label for="email">이메일</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Email"
-                           value="${user.email}">
-                </div>
-                <button type="submit" class="btn btn-success clearfix pull-right">수정</button>
-                <div class="clearfix"/>
-            </form>
-        </div>
-    </div>
-</div>
-
-<jsp:include page="/template/footer.jsp"/>
-</body>
-</html>
