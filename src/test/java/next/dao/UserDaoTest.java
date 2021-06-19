@@ -1,21 +1,20 @@
 package next.dao;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
 import next.model.User;
+import org.junit.jupiter.api.Test;
 
-public class UserDaoTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    @Test
-    public void crud() throws Exception {
-        User expected = new User("userId", "password", "name", "javajigi@email.com");
-        UserDao userDao = new UserDao();
-        userDao.insert(expected);
+class UserDaoTest {
 
-        User actual = userDao.findByUserId(expected.getUserId());
-        assertEquals(expected, actual);
-    }
+  @Test
+  void crud() throws Exception {
+    User expected = new User("userId", "password", "name", "javajigi@email.com");
+    UserDao userDao = new UserDao();
+    userDao.insert(expected);
 
+    User actual = userDao.findByUserId(expected.getUserId());
+
+    assertThat(expected).isEqualTo(actual);
+  }
 }
