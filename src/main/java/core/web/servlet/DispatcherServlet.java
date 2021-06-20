@@ -1,6 +1,6 @@
 package core.web.servlet;
 
-import next.controller.ForwardController;
+import next.controller.Controller;
 import next.controller.users.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -34,34 +34,45 @@ public class DispatcherServlet extends HttpServlet {
   }
 
   @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+  protected void service(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
-    String execute = executeController(req, resp);
 
-    boolean isRedirect = execute.startsWith(DEFAULT_REDIRECT_PREFIX);
+    String uri = req.getRequestURI();
+
+    Controller controller = findController(uri);
+
+    try {
+
+      String viewName = controller.execute(req, resp);
+
+      move(viewName, req, resp);
+
+    } catch (Exception e) {
+      throw new ServletException(e.getMessage());
+    }
+  }
+
+  private Controller findController(String uri) {
+
+    Controller controller = mapping.get(uri);
+
+    if (isEmpty(controller)) {
+      controller = mapping.getForward();
+    }
+
+    return controller;
+  }
+
+  private void move(String viewName, HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
+    boolean isRedirect = viewName.startsWith(DEFAULT_REDIRECT_PREFIX);
 
     if (isRedirect) {
-      redirect(execute.split(DEFAULT_EXECUTE_SEPARATOR)[1], req, resp);
+      redirect(viewName.split(DEFAULT_EXECUTE_SEPARATOR)[1], request, response);
       return;
     }
 
-    forward(execute, req, resp);
-  }
-
-  @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-      throws ServletException, IOException {
-    doGet(req, resp);
-  }
-
-  private String executeController(HttpServletRequest request, HttpServletResponse response) {
-    var controller = mapping.get(request.getRequestURI());
-
-    if (isEmpty(controller)) {
-      controller = new ForwardController();
-    }
-
-    return controller.execute(request, response);
+    forward(viewName, request, response);
   }
 
   private void redirect(String redirect, HttpServletRequest request, HttpServletResponse response)
