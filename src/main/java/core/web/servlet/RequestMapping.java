@@ -1,6 +1,7 @@
 package core.web.servlet;
 
 import next.controller.Controller;
+import next.controller.ForwardController;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,14 +9,20 @@ import java.util.Map;
 
 public class RequestMapping {
 
-  private final Map<String, Controller> MAPPINGS = Collections.synchronizedMap(new HashMap<>());
+  private final Controller forward = new ForwardController();
+
+  private final Map<String, Controller> mappings = Collections.synchronizedMap(new HashMap<>());
 
   public RequestMapping add(String uri, Controller controller) {
-    MAPPINGS.put(uri, controller);
+    mappings.put(uri, controller);
     return this;
   }
 
   public Controller get(String uri) {
-    return MAPPINGS.get(uri);
+    return mappings.get(uri);
+  }
+
+  public Controller getForward() {
+    return forward;
   }
 }
