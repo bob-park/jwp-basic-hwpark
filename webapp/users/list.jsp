@@ -1,13 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
 <html lang="kr">
 <head>
-    <jsp:include page="/template/head.jsp"/>
+    <%@ include file="/include/header.jspf" %>
 </head>
 <body>
-<jsp:include page="/template/navigation.jsp"/>
+<%@ include file="/include/navigation.jspf" %>
 
 <div class="container" id="main">
     <div class="col-md-10 col-md-offset-1">
@@ -15,11 +15,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>#</th>
-                    <th>사용자 아이디</th>
-                    <th>이름</th>
-                    <th>이메일</th>
-                    <th></th>
+                    <th>#</th> <th>사용자 아이디</th> <th>이름</th> <th>이메일</th><th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -29,12 +25,8 @@
                         <td>${user.userId}</td>
                         <td>${user.name}</td>
                         <td>${user.email}</td>
-                        <c:if test="${sessionScope.user.userId == user.userId}">
-                            <td>
-                                <a href="/user/update?userId=${user.userId}" class="btn btn-success"
-                                   role="button">수정</a>
-                            </td>
-                        </c:if>
+                        <td><a href="/users/update?userId=${user.userId}" class="btn btn-success" role="button">수정</a>
+                        </td>
                     </tr>
                 </c:forEach>
                 </tbody>
@@ -43,7 +35,6 @@
     </div>
 </div>
 
-<jsp:include page="/template/footer.jsp"/>
-
+<%@ include file="/include/footer.jspf" %>
 </body>
 </html>
