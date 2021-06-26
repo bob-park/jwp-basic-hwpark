@@ -1,7 +1,4 @@
-package core.web.servlet;
-
-import next.controller.Controller;
-import next.controller.ForwardController;
+package core.mvc;
 
 import java.util.Collections;
 import java.util.HashMap;
