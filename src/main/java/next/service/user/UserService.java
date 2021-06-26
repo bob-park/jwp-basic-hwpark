@@ -21,4 +21,12 @@ public class UserService {
   public List<User> findAll() throws SQLException {
     return userDao.findAll();
   }
+
+  public User findUser(String userId) throws SQLException {
+    return userDao.findByUserId(userId);
+  }
+
+  public void updateUser(User user) throws SQLException {
+    userDao.update(user);
+  }
 }

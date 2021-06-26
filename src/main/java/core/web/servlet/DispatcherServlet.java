@@ -33,10 +33,10 @@ public class DispatcherServlet extends HttpServlet {
     mapping
         .add("/users/list", new ListUserController(userService))
         .add("/users/create", new CreateUserController())
-        .add("/users/login", new LoginController())
+        .add("/users/login", new LoginController(userService))
         .add("/users/logout", new LogoutController())
         .add("/users/profile", new ProfileController())
-        .add("/users/update", new UpdateUserController());
+        .add("/users/update", new UpdateUserController(userService));
   }
 
   @Override

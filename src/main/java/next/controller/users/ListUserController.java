@@ -27,7 +27,7 @@ public class ListUserController implements Controller {
     try {
       request.setAttribute("users", userService.findAll());
     } catch (Exception e) {
-      response.sendError(500, e.getMessage());
+      throw new RuntimeException(e.getMessage());
     }
 
     return "/users/list.jsp";
