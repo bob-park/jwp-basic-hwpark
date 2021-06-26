@@ -3,6 +3,8 @@ package core.web.servlet;
 import core.mvc.Controller;
 import core.mvc.RequestMapping;
 import next.controller.users.*;
+import next.dao.UserDao;
+import next.service.user.UserService;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
@@ -25,8 +27,11 @@ public class DispatcherServlet extends HttpServlet {
 
   public DispatcherServlet() {
 
+    var userDao = new UserDao();
+    var userService = new UserService(userDao);
+
     mapping
-        .add("/users/list", new ListUserController())
+        .add("/users/list", new ListUserController(userService))
         .add("/users/create", new CreateUserController())
         .add("/users/login", new LoginController())
         .add("/users/logout", new LogoutController())
@@ -40,7 +45,7 @@ public class DispatcherServlet extends HttpServlet {
 
     String uri = req.getRequestURI();
 
-    Controller controller = findController(uri);
+    var controller = findController(uri);
 
     try {
 
@@ -55,7 +60,7 @@ public class DispatcherServlet extends HttpServlet {
 
   private Controller findController(String uri) {
 
-    Controller controller = mapping.get(uri);
+    var controller = mapping.get(uri);
 
     if (isEmpty(controller)) {
       controller = mapping.getForward();
