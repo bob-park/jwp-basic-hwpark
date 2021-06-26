@@ -5,7 +5,6 @@ import next.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class UserService {
@@ -18,15 +17,19 @@ public class UserService {
     this.userDao = userDao;
   }
 
-  public List<User> findAll() throws SQLException {
+  public List<User> findAll() {
     return userDao.findAll();
   }
 
-  public User findUser(String userId) throws SQLException {
+  public User findUser(String userId) {
     return userDao.findByUserId(userId);
   }
 
-  public void updateUser(User user) throws SQLException {
+  public void createUser(User user) {
+    userDao.insert(user);
+  }
+
+  public void updateUser(User user) {
     userDao.update(user);
   }
 }

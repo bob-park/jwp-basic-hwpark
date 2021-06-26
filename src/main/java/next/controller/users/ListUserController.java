@@ -1,6 +1,5 @@
 package next.controller.users;
 
-import core.db.DataBase;
 import core.mvc.Controller;
 import next.controller.UserSessionUtils;
 import next.service.user.UserService;
@@ -24,11 +23,7 @@ public class ListUserController implements Controller {
       return "redirect:/users/login";
     }
 
-    try {
-      request.setAttribute("users", userService.findAll());
-    } catch (Exception e) {
-      throw new RuntimeException(e.getMessage());
-    }
+    request.setAttribute("users", userService.findAll());
 
     return "/users/list.jsp";
   }

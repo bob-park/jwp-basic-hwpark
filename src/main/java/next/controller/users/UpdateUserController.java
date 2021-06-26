@@ -1,6 +1,5 @@
 package next.controller.users;
 
-import core.db.DataBase;
 import core.mvc.Controller;
 import next.controller.UserSessionUtils;
 import next.model.User;
@@ -25,9 +24,9 @@ public class UpdateUserController implements Controller {
   @Override
   public String execute(HttpServletRequest request, HttpServletResponse response) {
 
+    var user = userService.findUser(request.getParameter("userId"));
+
     if (StringUtils.equalsIgnoreCase("get", request.getMethod())) {
-      String userId = request.getParameter("userId");
-      User user = DataBase.findUserById(userId);
       if (!UserSessionUtils.isSameUser(request.getSession(), user)) {
         throw new IllegalStateException("다른 사용자의 정보를 수정할 수 없습니다.");
       }
@@ -35,27 +34,22 @@ public class UpdateUserController implements Controller {
       return "/users/update";
     }
 
-    try {
-      var user = userService.findUser(request.getParameter("userId"));
-      if (!UserSessionUtils.isSameUser(request.getSession(), user)) {
-        throw new IllegalStateException("다른 사용자의 정보를 수정할 수 없습니다.");
-      }
-
-      var updateUser =
-          new User(
-              request.getParameter("userId"),
-              request.getParameter("password"),
-              request.getParameter("name"),
-              request.getParameter("email"));
-      logger.debug("Update User : {}", updateUser);
-
-      user.update(updateUser);
-
-      userService.updateUser(user);
-
-      return "redirect:/";
-    } catch (Exception e) {
-      throw new RuntimeException(e.getMessage());
+    if (!UserSessionUtils.isSameUser(request.getSession(), user)) {
+      throw new IllegalStateException("다른 사용자의 정보를 수정할 수 없습니다.");
     }
+
+    var updateUser =
+        new User(
+            request.getParameter("userId"),
+            request.getParameter("password"),
+            request.getParameter("name"),
+            request.getParameter("email"));
+    logger.debug("Update User : {}", updateUser);
+
+    user.update(updateUser);
+
+    userService.updateUser(user);
+
+    return "redirect:/";
   }
 }
