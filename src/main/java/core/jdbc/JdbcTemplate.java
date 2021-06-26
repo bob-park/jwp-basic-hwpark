@@ -22,7 +22,7 @@ public class JdbcTemplate {
 
       statement.executeUpdate();
     } catch (SQLException e) {
-      throw new DataAccessException(e.getMessage());
+      throw new DataAccessException(e);
     }
   }
 
@@ -47,7 +47,7 @@ public class JdbcTemplate {
         result.add(mapper.mapRow(rs));
       }
     } catch (SQLException e) {
-      throw new DataAccessException(e.getMessage());
+      throw new DataAccessException(e);
     }
 
     return result;
@@ -71,7 +71,7 @@ public class JdbcTemplate {
         return mapper.mapRow(rs);
       }
     } catch (SQLException e) {
-      throw new DataAccessException(e.getMessage());
+      throw new DataAccessException(e);
     }
 
     return null;
