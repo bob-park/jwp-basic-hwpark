@@ -1,7 +1,10 @@
 package core.web.servlet;
 
-import next.controller.Controller;
+import core.mvc.Controller;
+import core.mvc.RequestMapping;
 import next.controller.users.*;
+import next.dao.UserDao;
+import next.service.user.UserService;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
@@ -24,13 +27,16 @@ public class DispatcherServlet extends HttpServlet {
 
   public DispatcherServlet() {
 
+    var userDao = new UserDao();
+    var userService = new UserService(userDao);
+
     mapping
-        .add("/users/list", new ListUserController())
-        .add("/users/create", new CreateUserController())
-        .add("/users/login", new LoginController())
+        .add("/users/list", new ListUserController(userService))
+        .add("/users/create", new CreateUserController(userService))
+        .add("/users/login", new LoginController(userService))
         .add("/users/logout", new LogoutController())
-        .add("/users/profile", new ProfileController())
-        .add("/users/update", new UpdateUserController());
+        .add("/users/profile", new ProfileController(userService))
+        .add("/users/update", new UpdateUserController(userService));
   }
 
   @Override
@@ -39,7 +45,7 @@ public class DispatcherServlet extends HttpServlet {
 
     String uri = req.getRequestURI();
 
-    Controller controller = findController(uri);
+    var controller = findController(uri);
 
     try {
 
@@ -54,7 +60,7 @@ public class DispatcherServlet extends HttpServlet {
 
   private Controller findController(String uri) {
 
-    Controller controller = mapping.get(uri);
+    var controller = mapping.get(uri);
 
     if (isEmpty(controller)) {
       controller = mapping.getForward();

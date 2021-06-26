@@ -26,18 +26,17 @@ public class ContextLoaderListener implements ServletContextListener {
   private static final String DB_USERNAME = "sa";
   private static final String DB_PW = "";
 
-  //    @Override
-  //    public void contextInitialized(ServletContextEvent sce) {
-  //        ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-  //        populator.addScript(new ClassPathResource("jwp.sql"));
-  //        DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
-  //
-  //        logger.info("Completed Load ServletContext!");
-  //    }
-  //
-  //    @Override
-  //    public void contextDestroyed(ServletContextEvent sce) {
-  //    }
+  @Override
+  public void contextInitialized(ServletContextEvent sce) {
+    ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+    populator.addScript(new ClassPathResource("jwp.sql"));
+    DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
+
+    logger.info("Completed Load ServletContext!");
+  }
+
+  @Override
+  public void contextDestroyed(ServletContextEvent sce) {}
 
   public static DataSource getDataSource() {
     BasicDataSource ds = new BasicDataSource();

@@ -1,6 +1,6 @@
 package next.controller.users;
 
-import next.controller.Controller;
+import core.mvc.Controller;
 import next.controller.UserSessionUtils;
 
 import javax.servlet.http.HttpServletRequest;
