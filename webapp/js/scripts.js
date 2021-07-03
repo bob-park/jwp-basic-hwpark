@@ -20,10 +20,15 @@ $(document).ready(function () {/* jQuery toggle layout */
         }
     });
 
+
+});
+
+
+$(function () {
     /**
      * handle
      */
-    // add answer handle
+// add answer handle
     $(".answerWrite input[type=submit]").click(addAnswer);
 
     function addAnswer(e) {
@@ -42,10 +47,37 @@ $(document).ready(function () {/* jQuery toggle layout */
 
     function onSuccess(json, status) {
         const answerTemplate = $("#answerTemplate").html();
-        const template = answerTemplate.format(json.writer, new Date(json.createdDate), json.contents, json.answerId);
+        const template = answerTemplate.format(json.writer, new Date(json.createdDate), json.contents, json.answerId, json.answerId);
 
         $(".qna-comment-slipp-articles").prepend(template);
     }
+
+    // remove handle
+    $(".qna-comment-slipp-articles").on("click", ".form-delete", deleteAnswer);
+
+    function deleteAnswer(e) {
+        e.preventDefault();
+
+        const queryString = $(this).serialize();
+
+        $.ajax({
+            type: 'post',
+            url: '/api/qna/removeAnswer',
+            data: queryString,
+            dataType: 'json',
+            error: (err) => console.error(err),
+            success: (res) => {
+
+                console.log(res);
+
+                if (res.status === true) {
+                    $(this).parents(".article").remove();
+                }
+            },
+        });
+    }
+
 });
+
 
 

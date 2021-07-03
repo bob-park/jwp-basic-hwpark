@@ -3,6 +3,7 @@ package core.web.servlet;
 import core.mvc.Controller;
 import core.mvc.RequestMapping;
 import next.controller.qna.AddAnswerController;
+import next.controller.qna.RemoveAnswerController;
 import next.controller.qna.ShowController;
 import next.controller.users.*;
 import next.dao.AnswerDao;
@@ -59,7 +60,8 @@ public class DispatcherServlet extends HttpServlet {
      */
     mapping
         // qna
-        .add("/api/qna/addAnswer", new AddAnswerController(answerDao));
+        .add("/api/qna/addAnswer", new AddAnswerController(answerDao))
+        .add("/api/qna/removeAnswer", new RemoveAnswerController(answerDao));
   }
 
   @Override
