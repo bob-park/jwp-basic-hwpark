@@ -2,7 +2,10 @@ package core.web.servlet;
 
 import core.mvc.Controller;
 import core.mvc.RequestMapping;
+import next.controller.qna.ShowController;
 import next.controller.users.*;
+import next.dao.AnswerDao;
+import next.dao.QuestionDao;
 import next.dao.UserDao;
 import next.service.user.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -27,21 +30,32 @@ public class DispatcherServlet extends HttpServlet {
 
   public DispatcherServlet() {
 
+    /*
+     * dao
+     */
     var userDao = new UserDao();
+    var questionDao = new QuestionDao();
+    var answerDao = new AnswerDao();
+
+    /*
+     * service
+     */
     var userService = new UserService(userDao);
 
     mapping
+        // users
         .add("/users/list", new ListUserController(userService))
         .add("/users/create", new CreateUserController(userService))
         .add("/users/login", new LoginController(userService))
         .add("/users/logout", new LogoutController())
         .add("/users/profile", new ProfileController(userService))
-        .add("/users/update", new UpdateUserController(userService));
+        .add("/users/update", new UpdateUserController(userService))
+        // qna
+        .add("/qna/show", new ShowController(questionDao, answerDao));
   }
 
   @Override
-  protected void service(HttpServletRequest req, HttpServletResponse resp)
-      throws ServletException, IOException {
+  protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
 
     String uri = req.getRequestURI();
 
