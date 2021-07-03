@@ -28,7 +28,7 @@ public class AnswerDao {
   public Answer insert(Answer answer) {
     var sql = "INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES (?, ?, ?, ?)";
 
-    KeyHolder keyHolder = new KeyHolder();
+    var keyHolder = new KeyHolder();
 
     template.update(
         sql,
@@ -50,10 +50,16 @@ public class AnswerDao {
   }
 
   public List<Answer> findAllByQuestionId(long questionId) {
-    String sql =
+    var sql =
         "SELECT answerId, writer, contents, createdDate FROM ANSWERS WHERE questionId = ? "
             + "order by answerId desc";
 
     return template.query(sql, new Object[] {questionId}, MAPPER);
+  }
+
+  public void deleteById(long answerId) {
+    var sql = "DELETE FROM answers WHERE ID = ?";
+
+    template.update(sql, answerId);
   }
 }
