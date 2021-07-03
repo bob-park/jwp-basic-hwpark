@@ -51,14 +51,14 @@ public class AnswerDao {
 
   public List<Answer> findAllByQuestionId(long questionId) {
     var sql =
-        "SELECT answerId, writer, contents, createdDate FROM ANSWERS WHERE questionId = ? "
+        "SELECT answerId, writer, contents, createdDate, questionId FROM ANSWERS WHERE questionId = ? "
             + "order by answerId desc";
 
     return template.query(sql, new Object[] {questionId}, MAPPER);
   }
 
   public void deleteById(long answerId) {
-    var sql = "DELETE FROM answers WHERE ID = ?";
+    var sql = "DELETE FROM answers WHERE answerId = ?";
 
     template.update(sql, answerId);
   }
