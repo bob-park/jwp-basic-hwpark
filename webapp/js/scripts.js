@@ -9,3 +9,23 @@ $(document).ready(function () {/* jQuery toggle layout */
         }
     });
 });
+
+/**
+ * handle
+ */
+// add answer handle
+$(".answerWrite input[type=submit]").click(addAnswer);
+
+function addAnswer(e) {
+    e.preventDefault();
+    const queryString = $("form[name=answer]").serialize();
+
+    $.ajax({
+        type: 'post',
+        url: '/api/qna/addAnswer',
+        data: queryString,
+        dataType: 'json',
+        error: (err) => console.error(err),
+        success: (res) => console.log(res),
+    });
+}
