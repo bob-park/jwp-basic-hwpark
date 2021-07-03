@@ -2,6 +2,7 @@ package core.web.servlet;
 
 import core.mvc.Controller;
 import core.mvc.RequestMapping;
+import next.controller.qna.AddAnswerController;
 import next.controller.qna.ShowController;
 import next.controller.users.*;
 import next.dao.AnswerDao;
@@ -52,6 +53,13 @@ public class DispatcherServlet extends HttpServlet {
         .add("/users/update", new UpdateUserController(userService))
         // qna
         .add("/qna/show", new ShowController(questionDao, answerDao));
+
+    /*
+     * api
+     */
+    mapping
+        // qna
+        .add("/api/qna/addAnswer", new AddAnswerController(answerDao));
   }
 
   @Override
@@ -85,6 +93,11 @@ public class DispatcherServlet extends HttpServlet {
 
   private void move(String viewName, HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
+
+    if (isEmpty(viewName)) {
+      return;
+    }
+
     boolean isRedirect = viewName.startsWith(DEFAULT_REDIRECT_PREFIX);
 
     if (isRedirect) {
