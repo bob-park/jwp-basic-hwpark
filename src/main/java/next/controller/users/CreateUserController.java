@@ -1,6 +1,5 @@
 package next.controller.users;
 
-import core.db.DataBase;
 import core.mvc.Controller;
 import next.model.User;
 import next.service.user.UserService;

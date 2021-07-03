@@ -7,10 +7,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.commons.lang3.ObjectUtils.isNotEmpty;
+
 public class JdbcTemplate {
 
   public void update(String sql, Object... params) {
 
+    update(sql, null, params);
+  }
+
+  public void update(String sql, KeyHolder keyHolder, Object... params) {
     try (var conn = ConnectionManager.getConnection();
         var statement = conn.prepareStatement(sql)) {
 
@@ -21,9 +27,22 @@ public class JdbcTemplate {
       }
 
       statement.executeUpdate();
+
+      if (isNotEmpty(keyHolder)) {
+        ResultSet rs = statement.getGeneratedKeys();
+        if (rs.next()) {
+          keyHolder.setId(rs.getLong(1));
+        }
+        rs.close();
+      }
+
     } catch (SQLException e) {
       throw new DataAccessException(e);
     }
+  }
+
+  public <T> List<T> query(String sql, RowMapper<T> mapper) {
+    return query(sql, null, mapper);
   }
 
   public <T> List<T> query(String sql, Object[] params, RowMapper<T> mapper) {
@@ -51,6 +70,10 @@ public class JdbcTemplate {
     }
 
     return result;
+  }
+
+  public <T> T queryForObject(String sql, RowMapper<T> mapper) {
+    return queryForObject(sql, null, mapper);
   }
 
   public <T> T queryForObject(String sql, Object[] params, RowMapper<T> mapper) {
