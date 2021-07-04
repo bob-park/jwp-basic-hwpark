@@ -1,14 +1,13 @@
 package next.controller.users;
 
-import core.mvc.Controller;
-import core.mvc.view.JspView;
-import core.mvc.view.View;
+import core.mvc.AbstractController;
+import core.mvc.view.ModelAndView;
 import next.service.user.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ProfileController implements Controller {
+public class ProfileController extends AbstractController {
 
   private final UserService userService;
 
@@ -17,7 +16,7 @@ public class ProfileController implements Controller {
   }
 
   @Override
-  public View execute(HttpServletRequest request, HttpServletResponse response) {
+  public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) {
     String userId = request.getParameter("userId");
     var user = userService.findUser(userId);
 
@@ -26,6 +25,6 @@ public class ProfileController implements Controller {
     }
 
     request.setAttribute("user", user);
-    return new JspView("/users/profile");
+    return jspView("/users/profile");
   }
 }

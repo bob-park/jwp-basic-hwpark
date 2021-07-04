@@ -2,6 +2,7 @@ package core.web.servlet;
 
 import core.mvc.Controller;
 import core.mvc.RequestMapping;
+import core.mvc.view.ModelAndView;
 import core.mvc.view.View;
 import next.controller.qna.AddAnswerController;
 import next.controller.qna.RemoveAnswerController;
@@ -68,9 +69,10 @@ public class DispatcherServlet extends HttpServlet {
 
     try {
 
-      View view = controller.execute(req, resp);
+      ModelAndView mav = controller.execute(req, resp);
+      View view = mav.getView();
 
-      view.render(req, resp);
+      view.render(mav.getModel(), req, resp);
 
     } catch (Exception e) {
       throw new ServletException(e.getMessage());

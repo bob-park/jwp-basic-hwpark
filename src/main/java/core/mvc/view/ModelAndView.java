@@ -13,7 +13,7 @@ public class ModelAndView {
     this.view = view;
   }
 
-  public ModelAndView addObject(String name, String value) {
+  public ModelAndView addObject(String name, Object value) {
     model.put(name, value);
     return this;
   }

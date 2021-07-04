@@ -1,16 +1,15 @@
 package core.mvc;
 
-import core.mvc.view.JspView;
-import core.mvc.view.View;
+import core.mvc.view.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ForwardController implements Controller {
+public class ForwardController extends AbstractController {
 
   @Override
-  public View execute(HttpServletRequest request, HttpServletResponse response) {
+  public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) {
 
-    return new JspView(request.getRequestURI());
+    return jspView(request.getRequestURI());
   }
 }

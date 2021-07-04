@@ -1,8 +1,7 @@
 package next.controller.users;
 
-import core.mvc.Controller;
-import core.mvc.view.JspView;
-import core.mvc.view.View;
+import core.mvc.AbstractController;
+import core.mvc.view.ModelAndView;
 import next.controller.UserSessionUtils;
 import next.model.User;
 import next.service.user.UserService;
@@ -13,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class UpdateUserController implements Controller {
+public class UpdateUserController extends AbstractController {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -24,7 +23,7 @@ public class UpdateUserController implements Controller {
   }
 
   @Override
-  public View execute(HttpServletRequest request, HttpServletResponse response) {
+  public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) {
 
     var user = userService.findUser(request.getParameter("userId"));
 
@@ -33,7 +32,7 @@ public class UpdateUserController implements Controller {
         throw new IllegalStateException("다른 사용자의 정보를 수정할 수 없습니다.");
       }
       request.setAttribute("user", user);
-      return new JspView("/users/update");
+      return jspView("/users/update");
     }
 
     if (!UserSessionUtils.isSameUser(request.getSession(), user)) {
@@ -52,6 +51,6 @@ public class UpdateUserController implements Controller {
 
     userService.updateUser(user);
 
-    return new JspView("redirect:/");
+    return jspView("redirect:/");
   }
 }
