@@ -26,7 +26,7 @@ public class QuestionDao {
 
   public List<Question> findAll() {
     String sql =
-        "SELECT questionId, writer, title, createdDate, countOfAnswer FROM QUESTIONS "
+        "SELECT questionId, writer, title, contents, createdDate, countOfAnswer FROM QUESTIONS "
             + "order by questionId desc";
 
     return template.query(sql, QUESTION_ROW_MAPPER);

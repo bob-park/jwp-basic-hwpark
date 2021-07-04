@@ -2,8 +2,7 @@ package core.web.servlet;
 
 import core.mvc.Controller;
 import core.mvc.RequestMapping;
-import core.mvc.view.ModelAndView;
-import core.mvc.view.View;
+import next.controller.HomeController;
 import next.controller.qna.AddAnswerController;
 import next.controller.qna.RemoveAnswerController;
 import next.controller.qna.ShowController;
@@ -41,6 +40,8 @@ public class DispatcherServlet extends HttpServlet {
     var userService = new UserService(userDao);
 
     mapping
+        // home
+        .add("/", new HomeController(questionDao))
         // users
         .add("/users/list", new ListUserController(userService))
         .add("/users/create", new CreateUserController(userService))
@@ -69,8 +70,8 @@ public class DispatcherServlet extends HttpServlet {
 
     try {
 
-      ModelAndView mav = controller.execute(req, resp);
-      View view = mav.getView();
+      var mav = controller.execute(req, resp);
+      var view = mav.getView();
 
       view.render(mav.getModel(), req, resp);
 
