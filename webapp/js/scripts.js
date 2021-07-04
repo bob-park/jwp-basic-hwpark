@@ -73,7 +73,7 @@ $(function () {
 
                 console.log(res);
 
-                if (res.status === true) {
+                if (res.result.status === true) {
                     $(this).parents(".article").remove();
                 }
             },
