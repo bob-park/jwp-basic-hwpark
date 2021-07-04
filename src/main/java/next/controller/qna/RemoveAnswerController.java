@@ -1,7 +1,8 @@
 package next.controller.qna;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import core.mvc.Controller;
+import core.mvc.view.JsonView;
+import core.mvc.view.View;
 import next.dao.AnswerDao;
 import next.model.Result;
 import org.slf4j.Logger;
@@ -24,10 +25,7 @@ public class RemoveAnswerController implements Controller {
   }
 
   @Override
-  public String execute(HttpServletRequest request, HttpServletResponse response)
-      throws IOException {
-
-    var om = new ObjectMapper();
+  public View execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     var answerId = toLong(request.getParameter("answerId"));
 
@@ -37,9 +35,8 @@ public class RemoveAnswerController implements Controller {
 
     response.setContentType("application/json;charset=UTF-8");
 
-    var out = response.getWriter();
-    out.print(om.writeValueAsString(Result.ok()));
+    request.setAttribute("result", Result.ok());
 
-    return null;
+    return new JsonView();
   }
 }

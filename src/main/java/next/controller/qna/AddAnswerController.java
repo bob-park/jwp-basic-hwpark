@@ -1,7 +1,8 @@
 package next.controller.qna;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import core.mvc.Controller;
+import core.mvc.view.JsonView;
+import core.mvc.view.View;
 import next.dao.AnswerDao;
 import next.model.Answer;
 import org.apache.commons.lang3.StringUtils;
@@ -25,10 +26,7 @@ public class AddAnswerController implements Controller {
   }
 
   @Override
-  public String execute(HttpServletRequest request, HttpServletResponse response)
-      throws IOException {
-
-    var om = new ObjectMapper();
+  public View execute(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
     if (StringUtils.equalsIgnoreCase("POST", request.getMethod())) {
 
@@ -42,12 +40,9 @@ public class AddAnswerController implements Controller {
 
       var savedAnswer = answerDao.insert(answer);
 
-      response.setContentType("application/json;charset=UTF-8");
+      request.setAttribute("answer", savedAnswer);
 
-      var out = response.getWriter();
-      out.print(om.writeValueAsString(savedAnswer));
-
-      return null;
+      return new JsonView();
     }
 
     throw new IllegalStateException("Not allowed method.");

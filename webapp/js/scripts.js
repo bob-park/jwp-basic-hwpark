@@ -47,7 +47,10 @@ $(function () {
 
     function onSuccess(json, status) {
         const answerTemplate = $("#answerTemplate").html();
-        const template = answerTemplate.format(json.writer, new Date(json.createdDate), json.contents, json.answerId, json.answerId);
+
+        const data = json.answer;
+
+        const template = answerTemplate.format(data.writer, new Date(data.createdDate), data.contents, data.answerId, data.answerId);
 
         $(".qna-comment-slipp-articles").prepend(template);
     }

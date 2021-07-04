@@ -1,6 +1,8 @@
 package next.controller.users;
 
 import core.mvc.Controller;
+import core.mvc.view.JspView;
+import core.mvc.view.View;
 import next.model.User;
 import next.service.user.UserService;
 import org.slf4j.Logger;
@@ -20,7 +22,7 @@ public class CreateUserController implements Controller {
   }
 
   @Override
-  public String execute(HttpServletRequest request, HttpServletResponse response) {
+  public View execute(HttpServletRequest request, HttpServletResponse response) {
 
     User user =
         new User(
@@ -32,6 +34,6 @@ public class CreateUserController implements Controller {
 
     userService.createUser(user);
 
-    return "redirect:/";
+    return new JspView("redirect:/");
   }
 }
