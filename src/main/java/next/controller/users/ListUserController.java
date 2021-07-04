@@ -1,6 +1,7 @@
 package next.controller.users;
 
-import core.mvc.Controller;
+import core.mvc.AbstractController;
+import core.mvc.view.ModelAndView;
 import next.controller.UserSessionUtils;
 import next.service.user.UserService;
 
@@ -8,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class ListUserController implements Controller {
+public class ListUserController extends AbstractController {
 
   private final UserService userService;
 
@@ -17,14 +18,14 @@ public class ListUserController implements Controller {
   }
 
   @Override
-  public String execute(HttpServletRequest request, HttpServletResponse response)
+  public ModelAndView execute(HttpServletRequest request, HttpServletResponse response)
       throws IOException {
     if (!UserSessionUtils.isLogined(request.getSession())) {
-      return "redirect:/users/login";
+      return jspView("redirect:/users/login");
     }
 
     request.setAttribute("users", userService.findAll());
 
-    return "/users/list.jsp";
+    return jspView("/users/list.jsp");
   }
 }
