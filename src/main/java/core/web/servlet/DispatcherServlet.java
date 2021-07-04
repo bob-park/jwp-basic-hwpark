@@ -23,10 +23,6 @@ import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 @WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
 
-  //  private static final String DEFAULT_SUFFIX = "jsp";
-  //  private static final String DEFAULT_EXECUTE_SEPARATOR = ":";
-  //  private static final String DEFAULT_REDIRECT_PREFIX = "redirect";
-
   private final RequestMapping mapping = new RequestMapping();
 
   public DispatcherServlet() {
@@ -91,48 +87,4 @@ public class DispatcherServlet extends HttpServlet {
 
     return controller;
   }
-
-  //  private void move(String viewName, HttpServletRequest request, HttpServletResponse response)
-  //      throws IOException, ServletException {
-  //
-  //    if (isEmpty(viewName)) {
-  //      return;
-  //    }
-  //
-  //    boolean isRedirect = viewName.startsWith(DEFAULT_REDIRECT_PREFIX);
-  //
-  //    if (isRedirect) {
-  //      redirect(viewName.split(DEFAULT_EXECUTE_SEPARATOR)[1], request, response);
-  //      return;
-  //    }
-  //
-  //    forward(viewName, request, response);
-  //  }
-  //
-  //  private void redirect(String redirect, HttpServletRequest request, HttpServletResponse
-  // response)
-  //      throws IOException {
-  //
-  //    response.sendRedirect(redirect);
-  //  }
-  //
-  //  private void forward(String forward, HttpServletRequest request, HttpServletResponse response)
-  //      throws ServletException, IOException {
-  //
-  //    var rd = request.getRequestDispatcher(addSuffix(forward));
-  //    rd.forward(request, response);
-  //  }
-  //
-  //  private String addSuffix(String uri) {
-  //
-  //    String result = uri;
-  //
-  //    String[] tokens = uri.split("[.]");
-  //
-  //    if (tokens.length < 2 && !StringUtils.equals("/", uri)) {
-  //      result = uri + "." + DEFAULT_SUFFIX;
-  //    }
-  //
-  //    return result;
-  //  }
 }
