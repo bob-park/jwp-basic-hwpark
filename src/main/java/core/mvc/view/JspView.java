@@ -6,6 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.apache.commons.lang3.ObjectUtils.isNotEmpty;
@@ -26,7 +28,14 @@ public class JspView implements View {
   }
 
   @Override
-  public void render(HttpServletRequest request, HttpServletResponse response) throws Exception {
+  public void render(Map<String, ?> model, HttpServletRequest request, HttpServletResponse response)
+      throws Exception {
+
+    Set<String> keySet = model.keySet();
+
+    for (String key : keySet) {
+      request.setAttribute(key, model.get(key));
+    }
 
     move(viewName, request, response);
   }
