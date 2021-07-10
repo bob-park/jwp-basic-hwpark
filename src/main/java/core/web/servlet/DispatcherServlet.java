@@ -59,8 +59,8 @@ public class DispatcherServlet extends HttpServlet {
      */
     mapping
         // qna
-        .add("/api/qna/addAnswer", new AddAnswerController(answerDao))
-        .add("/api/qna/removeAnswer", new RemoveAnswerController(answerDao));
+        .add("/api/qna/addAnswer", new AddAnswerController(answerDao, questionDao))
+        .add("/api/qna/removeAnswer", new RemoveAnswerController(answerDao, questionDao));
   }
 
   @Override

@@ -3,6 +3,7 @@ package next.controller.qna;
 import core.mvc.AbstractController;
 import core.mvc.view.ModelAndView;
 import next.dao.AnswerDao;
+import next.dao.QuestionDao;
 import next.model.Answer;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -19,9 +20,11 @@ public class AddAnswerController extends AbstractController {
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
   private final AnswerDao answerDao;
+  private final QuestionDao questionDao;
 
-  public AddAnswerController(AnswerDao answerDao) {
+  public AddAnswerController(AnswerDao answerDao, QuestionDao questionDao) {
     this.answerDao = answerDao;
+    this.questionDao = questionDao;
   }
 
   @Override
@@ -39,6 +42,7 @@ public class AddAnswerController extends AbstractController {
       logger.debug("answer : {}", answer);
 
       var savedAnswer = answerDao.insert(answer);
+      questionDao.updateIncrementAnswerCount(savedAnswer.getQuestionId());
 
       return jsonView().addObject("answer", savedAnswer);
     }

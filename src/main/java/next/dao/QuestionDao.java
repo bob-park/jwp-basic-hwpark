@@ -59,4 +59,20 @@ public class QuestionDao {
 
     return findById(keyHolder.getId());
   }
+
+  public Question updateIncrementAnswerCount(Long questionId) {
+    var sql = "UPDATE QUESTIONS set countOfAnswer = countOfAnswer + 1 WHERE questionId = ?";
+
+    template.update(sql, questionId);
+
+    return findById(questionId);
+  }
+
+  public Question updateDecrementAnswerCount(Long questionId) {
+    var sql = "UPDATE QUESTIONS set countOfAnswer = countOfAnswer - 1 WHERE questionId = ?";
+
+    template.update(sql, questionId);
+
+    return findById(questionId);
+  }
 }
