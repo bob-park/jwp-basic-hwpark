@@ -4,6 +4,7 @@ import core.mvc.Controller;
 import core.mvc.RequestMapping;
 import next.controller.HomeController;
 import next.controller.qna.AddAnswerController;
+import next.controller.qna.AddQuestionController;
 import next.controller.qna.RemoveAnswerController;
 import next.controller.qna.ShowController;
 import next.controller.users.*;
@@ -50,6 +51,7 @@ public class DispatcherServlet extends HttpServlet {
         .add("/users/profile", new ProfileController(userService))
         .add("/users/update", new UpdateUserController(userService))
         // qna
+        .add("/qna/create", new AddQuestionController(questionDao))
         .add("/qna/show", new ShowController(questionDao, answerDao));
 
     /*

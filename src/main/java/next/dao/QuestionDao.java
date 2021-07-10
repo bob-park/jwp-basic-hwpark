@@ -1,9 +1,11 @@
 package next.dao;
 
 import core.jdbc.JdbcTemplate;
+import core.jdbc.KeyHolder;
 import core.jdbc.RowMapper;
 import next.model.Question;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public class QuestionDao {
@@ -38,5 +40,23 @@ public class QuestionDao {
             + "WHERE questionId = ?";
 
     return template.queryForObject(sql, new Object[] {questionId}, QUESTION_ROW_MAPPER);
+  }
+
+  public Question insert(Question question) {
+    var sql =
+        "INSERT INTO QUESTIONS (writer, title, contents, createdDate, countOfAnswer) VALUES (?, ?, ?, ?, ?)";
+
+    var keyHolder = new KeyHolder();
+
+    template.update(
+        sql,
+        keyHolder,
+        question.getWriter(),
+        question.getTitle(),
+        question.getContents(),
+        new Timestamp(question.getTimeFromCreateDate()),
+        0);
+
+    return findById(keyHolder.getId());
   }
 }
