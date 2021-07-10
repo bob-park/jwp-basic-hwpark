@@ -75,4 +75,12 @@ public class QuestionDao {
 
     return findById(questionId);
   }
+
+  public Question update(Question question) {
+    var sql = "UPDATE QUESTIONS set " + "title = ? " + ", contents = ? " + "where questionId = ?";
+
+    template.update(sql, question.getTitle(), question.getContents(), question.getQuestionId());
+
+    return findById(question.getQuestionId());
+  }
 }

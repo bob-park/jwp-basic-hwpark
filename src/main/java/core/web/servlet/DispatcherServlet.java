@@ -49,7 +49,8 @@ public class DispatcherServlet extends HttpServlet {
         .add("/users/update", new UpdateUserController(userService))
         // qna
         .add("/qna/form", new AddQuestionController(questionDao))
-        .add("/qna/show", new ShowController(questionDao, answerDao));
+        .add("/qna/show", new ShowController(questionDao, answerDao))
+        .add("/qna/updateForm", new UpdateQuestionController(userDao, questionDao));
 
     /*
      * api
