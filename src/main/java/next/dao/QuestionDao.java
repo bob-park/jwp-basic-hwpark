@@ -10,7 +10,7 @@ import java.util.List;
 
 public class QuestionDao {
 
-  private final JdbcTemplate template;
+  private final JdbcTemplate template = JdbcTemplate.getInstance();
 
   private static final RowMapper<Question> QUESTION_ROW_MAPPER =
       rs ->
@@ -21,10 +21,6 @@ public class QuestionDao {
               rs.getString("contents"),
               rs.getTimestamp("createdDate"),
               rs.getInt("countOfAnswer"));
-
-  public QuestionDao() {
-    this.template = new JdbcTemplate();
-  }
 
   public List<Question> findAll() {
     String sql =
