@@ -8,6 +8,7 @@ import next.controller.users.*;
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 import next.dao.UserDao;
+import next.service.qna.QuestionService;
 import next.service.user.UserService;
 
 import javax.servlet.ServletException;
@@ -36,6 +37,7 @@ public class DispatcherServlet extends HttpServlet {
      * service
      */
     var userService = new UserService(userDao);
+    var questionService = new QuestionService(userDao, questionDao);
 
     mapping
         // home
@@ -51,7 +53,7 @@ public class DispatcherServlet extends HttpServlet {
         .add("/qna/form", new AddQuestionController(questionDao))
         .add("/qna/show", new ShowController(questionDao, answerDao))
         .add("/qna/updateForm", new UpdateQuestionController(userDao, questionDao))
-        .add("/qna/remove", new RemoveQuestionController(userDao, questionDao));
+        .add("/qna/remove", new RemoveQuestionController(questionService));
 
     /*
      * api
@@ -60,7 +62,8 @@ public class DispatcherServlet extends HttpServlet {
         // qna
         .add("/api/qna/list", new QnaListController(questionDao))
         .add("/api/qna/addAnswer", new AddAnswerController(answerDao, questionDao))
-        .add("/api/qna/removeAnswer", new RemoveAnswerController(answerDao, questionDao));
+        .add("/api/qna/removeAnswer", new RemoveAnswerController(answerDao, questionDao))
+        .add("/api/qna/remove", new ApiRemoveQuestionController(questionService));
   }
 
   @Override
