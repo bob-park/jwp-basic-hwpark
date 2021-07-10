@@ -48,9 +48,12 @@
                         <li><a href="#">»</a></li>
                     </ul>
                 </div>
-                <div class="col-md-3 qna-write">
-                    <a href="/qna/form" class="btn btn-primary pull-right" role="button">질문하기</a>
-                </div>
+                <c:if test="${not empty sessionScope.user}">
+                    <div class="col-md-3 qna-write">
+                        <a href="/qna/form" class="btn btn-primary pull-right" role="button">질문하기</a>
+                    </div>
+                </c:if>
+
             </div>
         </div>
     </div>

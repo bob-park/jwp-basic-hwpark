@@ -10,7 +10,7 @@ import java.util.List;
 
 public class AnswerDao {
 
-  private final JdbcTemplate template;
+  private final JdbcTemplate template = JdbcTemplate.getInstance();
 
   private static final RowMapper<Answer> MAPPER =
       rs ->
@@ -21,9 +21,6 @@ public class AnswerDao {
               rs.getTimestamp("createdDate"),
               rs.getLong("questionId"));
 
-  public AnswerDao() {
-    this.template = new JdbcTemplate();
-  }
 
   public Answer insert(Answer answer) {
     var sql = "INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES (?, ?, ?, ?)";

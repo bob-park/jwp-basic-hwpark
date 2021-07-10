@@ -8,7 +8,7 @@ import java.util.List;
 
 public class UserDao {
 
-  private final JdbcTemplate template;
+  private final JdbcTemplate template = JdbcTemplate.getInstance();
 
   private static final RowMapper<User> MAPPER =
       rs ->
@@ -17,10 +17,6 @@ public class UserDao {
               rs.getString("password"),
               rs.getString("name"),
               rs.getString("email"));
-
-  public UserDao() {
-    this.template = new JdbcTemplate();
-  }
 
   public void insert(User user) {
     var sql = "INSERT INTO USERS VALUES (?, ?, ?, ?)";
