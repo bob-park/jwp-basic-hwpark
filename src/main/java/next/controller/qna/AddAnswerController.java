@@ -2,6 +2,7 @@ package next.controller.qna;
 
 import core.mvc.AbstractController;
 import core.mvc.view.ModelAndView;
+import next.controller.UserSessionUtils;
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 import next.model.Answer;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 import static org.apache.commons.lang3.math.NumberUtils.toLong;
 
 public class AddAnswerController extends AbstractController {
@@ -31,11 +33,17 @@ public class AddAnswerController extends AbstractController {
   public ModelAndView execute(HttpServletRequest request, HttpServletResponse response)
       throws IOException {
 
+    var user = UserSessionUtils.getUserFromSession(request.getSession());
+
+    if (isEmpty(user)) {
+      throw new IllegalStateException("not logged in.");
+    }
+
     if (StringUtils.equalsIgnoreCase("POST", request.getMethod())) {
 
       var answer =
           new Answer(
-              request.getParameter("writer"),
+              user.getUserId(),
               request.getParameter("contents"),
               toLong(request.getParameter("questionId")));
 

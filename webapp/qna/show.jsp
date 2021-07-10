@@ -36,15 +36,19 @@
                     </div>
                     <div class="article-util">
                         <ul class="article-util-list">
-                            <li>
-                                <a class="link-modify-article" href="/qna/updateForm?questionId=${question.questionId}">수정</a>
-                            </li>
-                            <li>
-                                <form class="form-delete" action="#" method="POST">
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <button class="link-delete-article" type="submit">삭제</button>
-                                </form>
-                            </li>
+                            <c:if test="${sessionScope.user.userId == question.writer}">
+                                <li>
+                                    <a class="link-modify-article"
+                                       href="/qna/updateForm?questionId=${question.questionId}">수정</a>
+                                </li>
+                                <li>
+                                    <form class="form-delete" action="/qna/remove?questionId=${question.questionId}"
+                                          method="POST">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button class="link-delete-article" type="submit">삭제</button>
+                                    </form>
+                                </li>
+                            </c:if>
                             <li>
                                 <a class="link-modify-article" href="/">목록</a>
                             </li>
@@ -92,9 +96,9 @@
                             <div class="answerWrite">
                                 <form name="answer" method="post">
                                     <input type="hidden" name="questionId" value="${question.questionId}">
-                                    <div class="form-group col-lg-4" style="padding-top:10px;">
-                                        <input class="form-control" id="writer" name="writer" placeholder="이름">
-                                    </div>
+                                    <%--                                    <div class="form-group col-lg-4" style="padding-top:10px;">--%>
+                                    <%--                                        <input class="form-control" id="writer" name="writer" placeholder="이름">--%>
+                                    <%--                                    </div>--%>
                                     <div class="form-group col-lg-12">
                                         <textarea name="contents" id="contents" class="form-control"
                                                   placeholder=""></textarea>

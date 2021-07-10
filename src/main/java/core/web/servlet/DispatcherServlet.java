@@ -50,7 +50,8 @@ public class DispatcherServlet extends HttpServlet {
         // qna
         .add("/qna/form", new AddQuestionController(questionDao))
         .add("/qna/show", new ShowController(questionDao, answerDao))
-        .add("/qna/updateForm", new UpdateQuestionController(userDao, questionDao));
+        .add("/qna/updateForm", new UpdateQuestionController(userDao, questionDao))
+        .add("/qna/remove", new RemoveQuestionController(userDao, questionDao));
 
     /*
      * api

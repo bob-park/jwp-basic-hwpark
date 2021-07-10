@@ -79,4 +79,23 @@ public class QuestionDao {
 
     return findById(question.getQuestionId());
   }
+
+  public boolean checkDelete(long questionId, String writer) {
+    var sql =
+        "select count(questionId) as count from questions where questionId = ? and writer= ?  and countOfAnswer = (select count(answerId) from answers where questionId = ? and writer = ? )";
+
+    long count =
+        template.queryForObject(
+            sql,
+            new Object[] {questionId, writer, questionId, writer},
+            (rs -> rs.getLong("count")));
+
+    return count > 0;
+  }
+
+  public void delete(long questionId) {
+    var sql = "DELETE FROM QUESTIONS where questionId = ?";
+
+    template.update(sql, questionId);
+  }
 }
