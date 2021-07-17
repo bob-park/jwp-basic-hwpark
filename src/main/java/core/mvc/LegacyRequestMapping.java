@@ -59,12 +59,12 @@ public class LegacyRequestMapping implements HandlerMapping {
     mappings.put("/", new HomeController(questionDao));
 
     // users
-    mappings.put("/users/list", new ListUserController(userService));
-    mappings.put("/users/create", new CreateUserController(userService));
-    mappings.put("/users/login", new LoginController(userService));
-    mappings.put("/users/logout", new LogoutController());
-    mappings.put("/users/profile", new ProfileController(userService));
-    mappings.put("/users/update", new UpdateUserController(userService));
+//    mappings.put("/users/list", new ListUserController(userService));
+//    mappings.put("/users/create", new CreateUserController(userService));
+//    mappings.put("/users/login", new LoginController(userService));
+//    mappings.put("/users/logout", new LogoutController());
+//    mappings.put("/users/profile", new ProfileController(userService));
+//    mappings.put("/users/update", new UpdateUserController(userService));
 
     // qna
     mappings.put("/qna/form", new AddQuestionController(questionDao));

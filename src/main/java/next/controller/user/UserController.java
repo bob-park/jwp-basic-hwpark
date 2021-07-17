@@ -20,20 +20,20 @@ public class UserController extends AbstractNewController {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
-  private final UserDao userDao;
+  private final UserDao userDao = new UserDao();
 
-  public UserController(UserDao userDao) {
-    this.userDao = userDao;
-  }
+//  public UserController(UserDao userDao) {
+//    this.userDao = userDao;
+//  }
 
-  @RequestMapping("/users")
+  @RequestMapping("/users/list")
   public ModelAndView list(HttpServletRequest request, HttpServletResponse response)
       throws Exception {
     if (!UserSessionUtils.isLogined(request.getSession())) {
-      return jspView("redirect:/users/loginForm");
+      return jspView("redirect:/users/login");
     }
 
-    ModelAndView mav = jspView("/user/list.jsp");
+    ModelAndView mav = jspView("/users/list.jsp");
     mav.addObject("users", userDao.findAll());
     return mav;
   }
@@ -42,7 +42,7 @@ public class UserController extends AbstractNewController {
   public ModelAndView profile(HttpServletRequest request, HttpServletResponse response)
       throws Exception {
     String userId = request.getParameter("userId");
-    ModelAndView mav = jspView("/user/profile.jsp");
+    ModelAndView mav = jspView("/users/profile.jsp");
     mav.addObject("user", userDao.findByUserId(userId));
     return mav;
   }
@@ -50,7 +50,7 @@ public class UserController extends AbstractNewController {
   @RequestMapping("/users/form")
   public ModelAndView form(HttpServletRequest request, HttpServletResponse response)
       throws Exception {
-    return jspView("/user/form.jsp");
+    return jspView("/users/form.jsp");
   }
 
   @RequestMapping(value = "/users/create", method = RequestMethod.POST)
@@ -75,7 +75,7 @@ public class UserController extends AbstractNewController {
     if (!UserSessionUtils.isSameUser(request.getSession(), user)) {
       throw new IllegalStateException("다른 사용자의 정보를 수정할 수 없습니다.");
     }
-    ModelAndView mav = jspView("/user/updateForm.jsp");
+    ModelAndView mav = jspView("/users/updateForm.jsp");
     mav.addObject("user", user);
     return mav;
   }
@@ -100,10 +100,10 @@ public class UserController extends AbstractNewController {
     return jspView("redirect:/");
   }
 
-  @RequestMapping("/users/loginForm")
+  @RequestMapping("/users/login")
   public ModelAndView loginForm(HttpServletRequest request, HttpServletResponse response)
       throws Exception {
-    return jspView("/user/login.jsp");
+    return jspView("/users/login.jsp");
   }
 
   @RequestMapping(value = "/users/login", method = RequestMethod.POST)
