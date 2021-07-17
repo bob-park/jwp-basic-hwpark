@@ -1,7 +1,7 @@
 package core.web.servlet;
 
 import core.mvc.Controller;
-import core.mvc.RequestMapping;
+import core.mvc.LegacyRequestMapping;
 import next.controller.HomeController;
 import next.controller.qna.*;
 import next.controller.users.*;
@@ -19,52 +19,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 
-@WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
+//@WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
 
-  private final RequestMapping mapping = new RequestMapping();
+  private final LegacyRequestMapping mapping = new LegacyRequestMapping();
 
-  public DispatcherServlet() {
-
-    /*
-     * dao
-     */
-    var userDao = new UserDao();
-    var questionDao = new QuestionDao();
-    var answerDao = new AnswerDao();
-
-    /*
-     * service
-     */
-    var userService = new UserService(userDao);
-    var questionService = new QuestionService(userDao, questionDao);
-
-    mapping
-        // home
-        .add("/", new HomeController(questionDao))
-        // users
-        .add("/users/list", new ListUserController(userService))
-        .add("/users/create", new CreateUserController(userService))
-        .add("/users/login", new LoginController(userService))
-        .add("/users/logout", new LogoutController())
-        .add("/users/profile", new ProfileController(userService))
-        .add("/users/update", new UpdateUserController(userService))
-        // qna
-        .add("/qna/form", new AddQuestionController(questionDao))
-        .add("/qna/show", new ShowController(questionDao, answerDao))
-        .add("/qna/updateForm", new UpdateQuestionController(userDao, questionDao))
-        .add("/qna/remove", new RemoveQuestionController(questionService));
-
-    /*
-     * api
-     */
-    mapping
-        // qna
-        .add("/api/qna/list", new QnaListController(questionDao))
-        .add("/api/qna/addAnswer", new AddAnswerController(answerDao, questionDao))
-        .add("/api/qna/removeAnswer", new RemoveAnswerController(answerDao, questionDao))
-        .add("/api/qna/remove", new ApiRemoveQuestionController(questionService));
-  }
 
   @Override
   protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
