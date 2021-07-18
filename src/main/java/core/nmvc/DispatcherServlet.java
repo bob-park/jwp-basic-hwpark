@@ -1,7 +1,7 @@
 package core.nmvc;
 
 import com.google.common.collect.Lists;
-import core.mvc.Controller;
+import core.mvc.ControllerHandlerAdapter;
 import core.mvc.LegacyRequestMapping;
 import core.mvc.view.ModelAndView;
 import core.mvc.view.View;
@@ -25,6 +25,7 @@ public class DispatcherServlet extends HttpServlet {
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
   private final List<HandlerMapping> mappings = Lists.newArrayList();
+  private final List<HandlerAdapter> handlerAdapters = Lists.newArrayList();
 
   @Override
   public void init() throws ServletException {
@@ -36,6 +37,9 @@ public class DispatcherServlet extends HttpServlet {
 
     mappings.add(lhm);
     mappings.add(ahm);
+
+    handlerAdapters.add(new ControllerHandlerAdapter());
+    handlerAdapters.add(new HandlerExecutionHandlerAdapter());
   }
 
   @Override
@@ -74,10 +78,13 @@ public class DispatcherServlet extends HttpServlet {
 
   private ModelAndView execute(Object handler, HttpServletRequest req, HttpServletResponse reps)
       throws Exception {
-    if (handler instanceof Controller) {
-      return ((Controller) handler).execute(req, reps);
+
+    for (HandlerAdapter handlerAdapter : handlerAdapters) {
+      if (handlerAdapter.support(handler)) {
+        return handlerAdapter.handle(req, reps, handler);
+      }
     }
 
-    return ((HandlerExecution) handler).handle(req, reps);
+    return null;
   }
 }
