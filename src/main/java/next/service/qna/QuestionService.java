@@ -3,6 +3,8 @@ package next.service.qna;
 import next.controller.UserSessionUtils;
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
+import next.exception.CannotDeleteException;
+import next.model.User;
 import org.h2.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,21 +25,20 @@ public class QuestionService {
     this.questionDao = questionDao;
   }
 
-  public void removeQuestion(long questionId, String userId) {
+  public void removeQuestion(long questionId, User user) {
 
     var question = questionDao.findById(questionId);
 
     if (isEmpty(question)) {
-      throw new IllegalStateException("no exist question.");
+      throw new CannotDeleteException("no exist question.");
     }
 
-    if (!StringUtils.equals(userId, question.getWriter())) {
-      throw new IllegalStateException("No same question user.");
+    if (!StringUtils.equals(user.getUserId(), question.getWriter())) {
+      throw new CannotDeleteException("No same question user.");
     }
-
 
     if (!questionDao.checkDelete(question.getQuestionId(), question.getWriter())) {
-      throw new IllegalStateException("can not remove question.");
+      throw new CannotDeleteException("can not remove question.");
     }
 
     questionDao.delete(question.getQuestionId());

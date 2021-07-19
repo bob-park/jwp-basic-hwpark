@@ -31,7 +31,7 @@ public class RemoveQuestionController extends AbstractController {
       throw new IllegalStateException("Not logged in.");
     }
 
-    questionService.removeQuestion(toLong(request.getParameter("questionId")), user.getUserId());
+    questionService.removeQuestion(toLong(request.getParameter("questionId")), user);
 
     return jspView("redirect:/");
   }
