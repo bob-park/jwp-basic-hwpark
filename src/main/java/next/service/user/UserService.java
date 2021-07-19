@@ -1,6 +1,6 @@
 package next.service.user;
 
-import next.dao.UserDao;
+import next.dao.impl.JdbcUserDao;
 import next.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,25 +11,25 @@ public class UserService {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
-  private final UserDao userDao;
+  private final JdbcUserDao jdbcUserDao;
 
-  public UserService(UserDao userDao) {
-    this.userDao = userDao;
+  public UserService(JdbcUserDao jdbcUserDao) {
+    this.jdbcUserDao = jdbcUserDao;
   }
 
   public List<User> findAll() {
-    return userDao.findAll();
+    return jdbcUserDao.findAll();
   }
 
   public User findUser(String userId) {
-    return userDao.findByUserId(userId);
+    return jdbcUserDao.findByUserId(userId);
   }
 
   public void createUser(User user) {
-    userDao.insert(user);
+    jdbcUserDao.insert(user);
   }
 
   public void updateUser(User user) {
-    userDao.update(user);
+    jdbcUserDao.update(user);
   }
 }
