@@ -3,6 +3,7 @@ package next.service.qna;
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 import next.exception.CannotDeleteException;
+import next.model.Answer;
 import next.model.Question;
 import next.model.User;
 import org.assertj.core.util.Lists;
@@ -16,9 +17,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,6 +59,8 @@ class QuestionServiceTest {
     when(answerDao.findAllByQuestionId(questionId)).thenReturn(Lists.newArrayList());
 
     questionService.removeQuestion(questionId, newUser(userId));
+
+    verify(questionDao).delete(questionId);
   }
 
   private User newUser(String userId) {
@@ -63,7 +68,11 @@ class QuestionServiceTest {
   }
 
   private Question newQuestion(long questionId, String userId) {
-    return new Question(questionId, userId, "test", "test", new Date(), 1);
+    return new Question(questionId, userId, "test", "test", new Date(), 1) {
+      public boolean canDelete(User user, List<Answer> answerList) {
+        return true;
+      }
+    };
   }
 
   private static Stream<Arguments> provideQuestion() {
