@@ -1,8 +1,11 @@
 package next.service.qna;
 
 import next.controller.UserSessionUtils;
+import next.dao.AnswerDao;
 import next.dao.QuestionDao;
-import next.dao.UserDao;
+import next.exception.CannotDeleteException;
+import next.model.User;
+import org.h2.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,31 +17,25 @@ public class QuestionService {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
-  private final UserDao userDao;
   private final QuestionDao questionDao;
+  private final AnswerDao answerDao;
 
-  public QuestionService(UserDao userDao, QuestionDao questionDao) {
-    this.userDao = userDao;
+  public QuestionService(QuestionDao questionDao, AnswerDao answerDao) {
+    this.answerDao = answerDao;
     this.questionDao = questionDao;
   }
 
-  public void removeQuestion(HttpSession session, long questionId) {
+  public void removeQuestion(long questionId, User user) {
 
     var question = questionDao.findById(questionId);
 
     if (isEmpty(question)) {
-      throw new IllegalStateException("no exist question.");
+      throw new CannotDeleteException("no exist question.");
     }
 
-    if (!UserSessionUtils.isSameUser(session, userDao.findByUserId(question.getWriter()))) {
-      throw new IllegalStateException("No same question user.");
+    if (question.canDelete(user, answerDao.findAllByQuestionId(questionId))) {
+      questionDao.delete(question.getQuestionId());
     }
-
-    if (!questionDao.checkDelete(question.getQuestionId(), question.getWriter())) {
-      throw new IllegalStateException("can not remove question.");
-    }
-
-    questionDao.delete(question.getQuestionId());
 
     logger.debug("delete questionId : {}", question.getQuestionId());
   }

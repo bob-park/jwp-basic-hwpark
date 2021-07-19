@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
+import core.di.BeanFactory;
 import org.reflections.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +27,13 @@ public class AnnotationHandlerMapping implements HandlerMapping {
   }
 
   public void initialize() {
-    ControllerScanner controllerScanner = new ControllerScanner(basePackage);
 
-    Map<Class<?>, Object> controllers = controllerScanner.getControllers();
+    BeanScanner beanScanner = new BeanScanner(basePackage);
+    BeanFactory beanFactory = new BeanFactory(beanScanner.scan());
+
+    beanFactory.initialize();
+
+    Map<Class<?>, Object> controllers = beanFactory.getControllers();
 
     Set<Method> methods = getRequestMappingMethods(controllers.keySet());
 
@@ -38,7 +43,8 @@ public class AnnotationHandlerMapping implements HandlerMapping {
       logger.debug("register handlerExecution : url is {}, method is {}", rm.value(), method);
 
       handlerExecutions.put(
-          createHandlerKey(rm), new HandlerExecution(method.getDeclaringClass(), method));
+          createHandlerKey(rm),
+          new HandlerExecution(beanFactory.getBean(method.getDeclaringClass()), method));
     }
   }
 

@@ -3,12 +3,10 @@ package core.mvc;
 import core.nmvc.HandlerMapping;
 import next.controller.HomeController;
 import next.controller.qna.*;
-import next.controller.users.*;
-import next.dao.AnswerDao;
-import next.dao.QuestionDao;
-import next.dao.UserDao;
+import next.dao.impl.JdbcAnswerDao;
+import next.dao.impl.JdbcQuestionDao;
+import next.dao.impl.JdbcUserDao;
 import next.service.qna.QuestionService;
-import next.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,26 +43,17 @@ public class LegacyRequestMapping implements HandlerMapping {
     /*
      * dao
      */
-    var userDao = new UserDao();
-    var questionDao = new QuestionDao();
-    var answerDao = new AnswerDao();
+    var userDao = new JdbcUserDao();
+    var questionDao = new JdbcQuestionDao();
+    var answerDao = new JdbcAnswerDao();
 
     /*
      * service
      */
-    var userService = new UserService(userDao);
-    var questionService = new QuestionService(userDao, questionDao);
+    var questionService = new QuestionService(questionDao, answerDao);
 
     // home
     mappings.put("/", new HomeController(questionDao));
-
-    // users
-//    mappings.put("/users/list", new ListUserController(userService));
-//    mappings.put("/users/create", new CreateUserController(userService));
-//    mappings.put("/users/login", new LoginController(userService));
-//    mappings.put("/users/logout", new LogoutController());
-//    mappings.put("/users/profile", new ProfileController(userService));
-//    mappings.put("/users/update", new UpdateUserController(userService));
 
     // qna
     mappings.put("/qna/form", new AddQuestionController(questionDao));

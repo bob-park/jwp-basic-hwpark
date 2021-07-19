@@ -1,6 +1,7 @@
 package next.dao;
 
 import core.jdbc.ConnectionManager;
+import next.dao.impl.JdbcUserDao;
 import next.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserDaoTest {
+class JdbcUserDaoTest {
   @BeforeEach
   void setup() {
     ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
@@ -23,22 +24,22 @@ class UserDaoTest {
   @Test
   void crud() throws Exception {
     User expected = new User("userId", "password", "name", "javajigi@email.com");
-    UserDao userDao = new UserDao();
-    userDao.insert(expected);
-    User actual = userDao.findByUserId(expected.getUserId());
+    JdbcUserDao jdbcUserDao = new JdbcUserDao();
+    jdbcUserDao.insert(expected);
+    User actual = jdbcUserDao.findByUserId(expected.getUserId());
 
     assertThat(actual).isEqualTo(expected);
 
     expected.update(new User("userId", "password2", "name2", "sanjigi@email.com"));
-    userDao.update(expected);
-    actual = userDao.findByUserId(expected.getUserId());
+    jdbcUserDao.update(expected);
+    actual = jdbcUserDao.findByUserId(expected.getUserId());
     assertThat(actual).isEqualTo(expected);
   }
 
   @Test
   void findAll() throws Exception {
-    UserDao userDao = new UserDao();
-    List<User> users = userDao.findAll();
+    JdbcUserDao jdbcUserDao = new JdbcUserDao();
+    List<User> users = jdbcUserDao.findAll();
     assertThat(users.size()).isEqualTo(1);
   }
 }

@@ -25,11 +25,7 @@ public class HandlerExecution {
       throws Exception {
 
     try {
-      return (ModelAndView)
-          method.invoke(
-              ((Class<?>) declaredObject).getDeclaredConstructor().newInstance(),
-              request,
-              response);
+      return (ModelAndView) method.invoke(declaredObject, request, response);
     } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
       logger.error("{} method invoke fail. error message : {}", method, e.getMessage());
       throw new RuntimeException(e);

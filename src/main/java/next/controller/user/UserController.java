@@ -1,6 +1,7 @@
 package next.controller.user;
 
 import core.annotation.Controller;
+import core.annotation.Inject;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
 import core.mvc.view.ModelAndView;
@@ -20,11 +21,12 @@ public class UserController extends AbstractNewController {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
-  private final UserDao userDao = new UserDao();
+  private final UserDao userDao;
 
-//  public UserController(UserDao userDao) {
-//    this.userDao = userDao;
-//  }
+  @Inject
+  public UserController(UserDao userDao) {
+    this.userDao = userDao;
+  }
 
   @RequestMapping("/users/list")
   public ModelAndView list(HttpServletRequest request, HttpServletResponse response)
