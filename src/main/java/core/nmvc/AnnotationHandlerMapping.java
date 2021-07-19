@@ -43,7 +43,8 @@ public class AnnotationHandlerMapping implements HandlerMapping {
       logger.debug("register handlerExecution : url is {}, method is {}", rm.value(), method);
 
       handlerExecutions.put(
-          createHandlerKey(rm), new HandlerExecution(method.getDeclaringClass(), method));
+          createHandlerKey(rm),
+          new HandlerExecution(beanFactory.getBean(method.getDeclaringClass()), method));
     }
   }
 
