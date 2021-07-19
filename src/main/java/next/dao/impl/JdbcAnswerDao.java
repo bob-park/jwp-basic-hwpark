@@ -1,5 +1,6 @@
 package next.dao.impl;
 
+import core.annotation.Repository;
 import core.jdbc.JdbcTemplate;
 import core.jdbc.KeyHolder;
 import core.jdbc.RowMapper;
@@ -9,6 +10,7 @@ import next.model.Answer;
 import java.sql.Timestamp;
 import java.util.List;
 
+@Repository
 public class JdbcAnswerDao implements AnswerDao {
 
   private final JdbcTemplate template = JdbcTemplate.getInstance();

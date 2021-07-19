@@ -1,13 +1,13 @@
 package next.controller.user;
 
 import core.annotation.Controller;
+import core.annotation.Inject;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
 import core.mvc.view.ModelAndView;
 import core.nmvc.AbstractNewController;
 import next.controller.UserSessionUtils;
 import next.dao.UserDao;
-import next.dao.impl.JdbcUserDao;
 import next.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +21,12 @@ public class UserController extends AbstractNewController {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
-  private final UserDao userDao = new JdbcUserDao();
+  private final UserDao userDao;
 
-  //  public UserController(UserDao userDao) {
-  //    this.userDao = userDao;
-  //  }
+  @Inject
+  public UserController(UserDao userDao) {
+    this.userDao = userDao;
+  }
 
   @RequestMapping("/users/list")
   public ModelAndView list(HttpServletRequest request, HttpServletResponse response)
