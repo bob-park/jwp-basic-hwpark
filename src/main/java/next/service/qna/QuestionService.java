@@ -33,9 +33,9 @@ public class QuestionService {
       throw new CannotDeleteException("no exist question.");
     }
 
-    question.canDelete(user, answerDao.findAllByQuestionId(questionId));
-
-    questionDao.delete(question.getQuestionId());
+    if (question.canDelete(user, answerDao.findAllByQuestionId(questionId))) {
+      questionDao.delete(question.getQuestionId());
+    }
 
     logger.debug("delete questionId : {}", question.getQuestionId());
   }
