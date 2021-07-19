@@ -32,7 +32,7 @@ public class DispatcherServlet extends HttpServlet {
     LegacyRequestMapping lhm = new LegacyRequestMapping();
     lhm.initMapping();
 
-    AnnotationHandlerMapping ahm = new AnnotationHandlerMapping("next.controller");
+    AnnotationHandlerMapping ahm = new AnnotationHandlerMapping();
     ahm.initialize();
 
     mappings.add(lhm);
