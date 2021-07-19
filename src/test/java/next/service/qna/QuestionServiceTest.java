@@ -5,7 +5,7 @@ import next.dao.QuestionDao;
 import next.exception.CannotDeleteException;
 import next.model.Question;
 import next.model.User;
-import org.h2.util.StringUtils;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,8 +53,7 @@ class QuestionServiceTest {
     Question question = newQuestion(1, userId);
 
     when(questionDao.findById(questionId)).thenReturn(question);
-    when(questionDao.checkDelete(questionId, userId))
-        .thenReturn(StringUtils.equals(question.getWriter(), userId));
+    when(answerDao.findAllByQuestionId(questionId)).thenReturn(Lists.newArrayList());
 
     questionService.removeQuestion(questionId, newUser(userId));
   }

@@ -33,13 +33,7 @@ public class QuestionService {
       throw new CannotDeleteException("no exist question.");
     }
 
-    if (!StringUtils.equals(user.getUserId(), question.getWriter())) {
-      throw new CannotDeleteException("No same question user.");
-    }
-
-    if (!questionDao.checkDelete(question.getQuestionId(), question.getWriter())) {
-      throw new CannotDeleteException("can not remove question.");
-    }
+    question.canDelete(user, answerDao.findAllByQuestionId(questionId));
 
     questionDao.delete(question.getQuestionId());
 
