@@ -50,7 +50,7 @@ public class LegacyRequestMapping implements HandlerMapping {
     /*
      * service
      */
-    var questionService = new QuestionService(userDao, questionDao);
+    var questionService = new QuestionService(questionDao, answerDao);
 
     // home
     mappings.put("/", new HomeController(questionDao));
