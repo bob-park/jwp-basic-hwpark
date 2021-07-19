@@ -1,8 +1,8 @@
 package next.service.qna;
 
 import next.controller.UserSessionUtils;
-import next.dao.impl.JdbcQuestionDao;
-import next.dao.impl.JdbcUserDao;
+import next.dao.QuestionDao;
+import next.dao.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,31 +14,31 @@ public class QuestionService {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
-  private final JdbcUserDao jdbcUserDao;
-  private final JdbcQuestionDao jdbcQuestionDao;
+  private final UserDao userDao;
+  private final QuestionDao questionDao;
 
-  public QuestionService(JdbcUserDao jdbcUserDao, JdbcQuestionDao jdbcQuestionDao) {
-    this.jdbcUserDao = jdbcUserDao;
-    this.jdbcQuestionDao = jdbcQuestionDao;
+  public QuestionService(UserDao userDao, QuestionDao questionDao) {
+    this.userDao = userDao;
+    this.questionDao = questionDao;
   }
 
   public void removeQuestion(HttpSession session, long questionId) {
 
-    var question = jdbcQuestionDao.findById(questionId);
+    var question = questionDao.findById(questionId);
 
     if (isEmpty(question)) {
       throw new IllegalStateException("no exist question.");
     }
 
-    if (!UserSessionUtils.isSameUser(session, jdbcUserDao.findByUserId(question.getWriter()))) {
+    if (!UserSessionUtils.isSameUser(session, userDao.findByUserId(question.getWriter()))) {
       throw new IllegalStateException("No same question user.");
     }
 
-    if (!jdbcQuestionDao.checkDelete(question.getQuestionId(), question.getWriter())) {
+    if (!questionDao.checkDelete(question.getQuestionId(), question.getWriter())) {
       throw new IllegalStateException("can not remove question.");
     }
 
-    jdbcQuestionDao.delete(question.getQuestionId());
+    questionDao.delete(question.getQuestionId());
 
     logger.debug("delete questionId : {}", question.getQuestionId());
   }
