@@ -3,10 +3,10 @@ package core.di.inject.impl;
 import com.google.common.collect.Lists;
 import core.di.BeanFactory;
 import core.di.BeanFactoryUtils;
+import core.di.bean.BeanDefinition;
 import core.di.inject.Injector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 
 import java.lang.reflect.Constructor;
 import java.util.List;
@@ -43,6 +43,8 @@ public abstract class AbstractInjector implements Injector {
   abstract void inject(Object injectedBean, Object bean, BeanFactory beanFactory);
 
   private Object instantiateClass(Class<?> clazz) {
+
+    BeanDefinition beanDefinition = null;
     Object bean = beanFactory.getBean(clazz);
 
     if (bean != null) {
@@ -52,28 +54,31 @@ public abstract class AbstractInjector implements Injector {
     Constructor<?> injectedConstructor = BeanFactoryUtils.getInjectedConstructor(clazz);
 
     if (injectedConstructor == null) {
-      bean = BeanUtils.instantiateClass(clazz);
+      beanDefinition = new BeanDefinition(clazz);
 
-      beanFactory.setBean(clazz, bean);
+      beanFactory.registerBeanDefinition(clazz, beanDefinition);
 
-      return bean;
+      return beanFactory.getBean(clazz);
     }
 
     logger.debug("Constructor : {}", injectedConstructor);
-    bean = instantiateConstructor(injectedConstructor);
-    beanFactory.setBean(clazz, bean);
 
-    return bean;
+    beanDefinition = instantiateConstructor(injectedConstructor);
+
+    beanFactory.registerBeanDefinition(clazz, beanDefinition);
+
+    return beanFactory.getBean(clazz);
   }
 
-  private Object instantiateConstructor(Constructor<?> constructor) {
+  private BeanDefinition instantiateConstructor(Constructor<?> constructor) {
     Class<?>[] pTypes = constructor.getParameterTypes();
 
     List<Object> args = Lists.newArrayList();
 
     for (Class<?> clazz : pTypes) {
+
       Class<?> concreteClazz =
-          BeanFactoryUtils.findConcreteClass(clazz, beanFactory.getPreInstantiateBeans());
+          BeanFactoryUtils.findConcreteClass(clazz, beanFactory.getBeanDefinitionKeys());
 
       if (!beanFactory.contains(concreteClazz)) {
         throw new IllegalStateException(clazz + "는 bean 이 아니다.");
@@ -88,6 +93,6 @@ public abstract class AbstractInjector implements Injector {
       args.add(bean);
     }
 
-    return BeanUtils.instantiateClass(constructor, args.toArray());
+    return new BeanDefinition(constructor.getDeclaringClass());
   }
 }

@@ -1,15 +1,11 @@
 package next.service.qna;
 
-import next.controller.UserSessionUtils;
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 import next.exception.CannotDeleteException;
 import next.model.User;
-import org.h2.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.servlet.http.HttpSession;
 
 import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 
