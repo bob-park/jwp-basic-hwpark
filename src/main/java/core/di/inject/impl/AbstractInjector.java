@@ -78,7 +78,7 @@ public abstract class AbstractInjector implements Injector {
     for (Class<?> clazz : pTypes) {
 
       Class<?> concreteClazz =
-          BeanFactoryUtils.findConcreteClass(clazz, beanFactory.getBeanDefinitionKeys());
+          BeanFactoryUtils.findConcreteClass(clazz, beanFactory.getBeanClasses());
 
       if (!beanFactory.contains(concreteClazz)) {
         throw new IllegalStateException(clazz + "는 bean 이 아니다.");

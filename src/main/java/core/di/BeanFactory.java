@@ -20,10 +20,6 @@ public class BeanFactory implements BeanDefinitionRegistry {
   private final Map<Class<?>, Object> beans = Maps.newHashMap();
   private final Map<Class<?>, BeanDefinition> beanDefinitions = Maps.newHashMap();
 
-  public Set<Class<?>> getBeanDefinitionKeys() {
-    return beanDefinitions.keySet();
-  }
-
   public Set<Class<?>> getBeanClasses() {
     return beanDefinitions.keySet();
   }
@@ -96,7 +92,8 @@ public class BeanFactory implements BeanDefinitionRegistry {
     List<Object> args = Lists.newArrayList();
 
     for (Class<?> clazz : constructor.getParameterTypes()) {
-      args.add(clazz);
+
+      args.add(getBean(clazz));
     }
 
     return BeanUtils.instantiateClass(constructor, args.toArray());
