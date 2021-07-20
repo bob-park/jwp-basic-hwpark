@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
 import core.di.BeanFactory;
+import core.nmvc.scan.ClasspathBeanDefinitionScanner;
 import org.reflections.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +29,8 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 
   public void initialize() {
 
-    BeanScanner beanScanner = new BeanScanner(basePackage);
-    BeanFactory beanFactory = new BeanFactory(beanScanner.scan());
+    ClasspathBeanDefinitionScanner classpathBeanDefinitionScanner = new ClasspathBeanDefinitionScanner(basePackage);
+    BeanFactory beanFactory = new BeanFactory(classpathBeanDefinitionScanner.scan());
 
     beanFactory.initialize();
 
