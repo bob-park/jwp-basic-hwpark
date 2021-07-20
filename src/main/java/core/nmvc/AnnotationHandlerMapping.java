@@ -2,15 +2,18 @@ package core.nmvc;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import core.annotation.Controller;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
 import core.di.BeanFactory;
+import core.nmvc.context.ApplicationContext;
 import core.nmvc.scan.ClasspathBeanDefinitionScanner;
 import org.reflections.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
@@ -29,12 +32,9 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 
   public void initialize() {
 
-    ClasspathBeanDefinitionScanner classpathBeanDefinitionScanner = new ClasspathBeanDefinitionScanner(basePackage);
-    BeanFactory beanFactory = new BeanFactory(classpathBeanDefinitionScanner.scan());
+    ApplicationContext context = new ApplicationContext(basePackage);
 
-    beanFactory.initialize();
-
-    Map<Class<?>, Object> controllers = beanFactory.getControllers();
+    Map<Class<?>, Object> controllers = getControllers(context);
 
     Set<Method> methods = getRequestMappingMethods(controllers.keySet());
 
@@ -45,7 +45,7 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 
       handlerExecutions.put(
           createHandlerKey(rm),
-          new HandlerExecution(beanFactory.getBean(method.getDeclaringClass()), method));
+          new HandlerExecution(context.getBean(method.getDeclaringClass()), method));
     }
   }
 
@@ -74,5 +74,21 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 
   private HandlerKey createHandlerKey(RequestMapping rm) {
     return new HandlerKey(rm.value(), rm.method());
+  }
+
+  private Map<Class<?>, Object> getControllers(ApplicationContext context) {
+
+    Map<Class<?>, Object> controllers = Maps.newHashMap();
+
+    for (Class<?> clazz : context.getBeanClasses()) {
+
+      Annotation annotation = clazz.getAnnotation(Controller.class);
+
+      if (annotation != null) {
+        controllers.put(clazz, context.getBean(clazz));
+      }
+    }
+
+    return controllers;
   }
 }

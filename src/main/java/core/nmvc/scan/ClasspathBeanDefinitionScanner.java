@@ -4,6 +4,8 @@ import com.google.common.collect.Sets;
 import core.annotation.Controller;
 import core.annotation.Repository;
 import core.annotation.Service;
+import core.di.bean.BeanDefinition;
+import core.di.bean.BeanDefinitionRegistry;
 import org.reflections.Reflections;
 
 import java.lang.annotation.Annotation;
@@ -11,20 +13,28 @@ import java.util.Set;
 
 public class ClasspathBeanDefinitionScanner {
 
-  private final Reflections reflections;
+  private final BeanDefinitionRegistry beanDefinitionRegistry;
 
-  public ClasspathBeanDefinitionScanner(Object... basePackage) {
-    // ! 중요한거,  Reflections 의 생성자로 파라미터가 없는 경우 ([] length == 0 인 경우) 조건이 없는 경우 모든 패키지에서 찾는다.
-    this.reflections = new Reflections(basePackage);
+  public ClasspathBeanDefinitionScanner(BeanDefinitionRegistry beanDefinitionRegistry) {
+    this.beanDefinitionRegistry = beanDefinitionRegistry;
   }
 
   @SuppressWarnings("unchecked")
-  public Set<Class<?>> scan() {
-    return getTypeAnnotationWith(Controller.class, Service.class, Repository.class);
+  public void doScan(Object... basePackage) {
+
+    Reflections reflections = new Reflections(basePackage);
+
+    Set<Class<?>> beanClasses =
+        getTypeAnnotatedWith(reflections, Controller.class, Service.class, Repository.class);
+
+    for (Class<?> clazz : beanClasses) {
+      beanDefinitionRegistry.registerBeanDefinition(clazz, new BeanDefinition(clazz));
+    }
   }
 
   @SuppressWarnings("unchecked")
-  public Set<Class<?>> getTypeAnnotationWith(Class<? extends Annotation>... annotations) {
+  public Set<Class<?>> getTypeAnnotatedWith(
+      Reflections reflections, Class<? extends Annotation>... annotations) {
     Set<Class<?>> preInstantiatedBeans = Sets.newHashSet();
 
     for (Class<? extends Annotation> annotation : annotations) {
