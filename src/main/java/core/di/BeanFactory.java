@@ -1,14 +1,16 @@
 package core.di;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import core.annotation.Controller;
+import core.di.inject.Injector;
+import core.di.inject.impl.ConstructorInjector;
+import core.di.inject.impl.FieldInjector;
+import core.di.inject.impl.SetterInjector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,11 +20,15 @@ public class BeanFactory {
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
   private final Set<Class<?>> preInstantiateBeans;
-
   private final Map<Class<?>, Object> beans = Maps.newHashMap();
+  private final List<Injector> injectors;
 
   public BeanFactory(Set<Class<?>> preInstantiateBeans) {
     this.preInstantiateBeans = preInstantiateBeans;
+
+    this.injectors =
+        Arrays.asList(
+            new FieldInjector(this), new SetterInjector(this), new ConstructorInjector(this));
   }
 
   @SuppressWarnings("unchecked")
@@ -30,36 +36,32 @@ public class BeanFactory {
     return (T) beans.get(requiredType);
   }
 
+  public void setBean(Class<?> clazz, Object bean) {
+    beans.put(clazz, bean);
+  }
+
+  public Set<Class<?>> getPreInstantiateBeans() {
+    return preInstantiateBeans;
+  }
+
+  public boolean contains(Class<?> concreteClazz) {
+    return preInstantiateBeans.contains(concreteClazz);
+  }
+
   public void initialize() {
     for (Class<?> clazz : preInstantiateBeans) {
       if (beans.get(clazz) == null) {
-        instantiateClass(clazz);
+        logger.debug("instantiate Class : {}", clazz);
+
+        inject(clazz);
       }
     }
   }
 
-  public Object instantiateClass(Class<?> clazz) {
-    Object bean = beans.get(clazz);
-
-    if (bean != null) {
-      return bean;
+  private void inject(Class<?> clazz) {
+    for (Injector injector : injectors) {
+      injector.inject(clazz);
     }
-
-    Constructor<?> injectedConstructor = BeanFactoryUtils.getInjectedConstructor(clazz);
-
-    if (injectedConstructor == null) {
-      bean = BeanUtils.instantiateClass(clazz);
-
-      beans.put(clazz, bean);
-
-      return bean;
-    }
-
-    logger.debug("Constructor : {}", injectedConstructor);
-    bean = injectedConstructor(injectedConstructor);
-    beans.put(clazz, bean);
-
-    return bean;
   }
 
   public Map<Class<?>, Object> getControllers() {
@@ -74,29 +76,5 @@ public class BeanFactory {
     }
 
     return controllers;
-  }
-
-  private Object injectedConstructor(Constructor<?> constructor) {
-    Class<?>[] pTypes = constructor.getParameterTypes();
-
-    List<Object> args = Lists.newArrayList();
-
-    for (Class<?> clazz : pTypes) {
-      Class<?> concreteClazz = BeanFactoryUtils.findConcreteClass(clazz, preInstantiateBeans);
-
-      if (!preInstantiateBeans.contains(concreteClazz)) {
-        throw new IllegalStateException(clazz + "는 bean 이 아니다.");
-      }
-
-      Object bean = beans.get(concreteClazz);
-
-      if (bean == null) {
-        bean = instantiateClass(concreteClazz);
-      }
-
-      args.add(bean);
-    }
-
-    return BeanUtils.instantiateClass(constructor, args.toArray());
   }
 }
