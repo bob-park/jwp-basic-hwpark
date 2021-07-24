@@ -1,5 +1,6 @@
 package core.jdbc;
 
+import core.annotation.Component;
 import core.jdbc.exception.DataAccessException;
 
 import java.sql.ResultSet;
@@ -10,18 +11,19 @@ import java.util.List;
 import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 import static org.apache.commons.lang3.ObjectUtils.isNotEmpty;
 
+@Component
 public class JdbcTemplate {
 
-  private static JdbcTemplate instance;
-
-  public static JdbcTemplate getInstance() {
-
-    if (isEmpty(instance)) {
-      instance = new JdbcTemplate();
-    }
-
-    return instance;
-  }
+//  private static JdbcTemplate instance;
+//
+//  public static JdbcTemplate getInstance() {
+//
+//    if (isEmpty(instance)) {
+//      instance = new JdbcTemplate();
+//    }
+//
+//    return instance;
+//  }
 
   public void update(String sql, Object... params) {
 
