@@ -24,7 +24,7 @@ public class AnnotationConfigApplicationContext implements ApplicationContext {
 
     AnnotatedBeanDefinitionReader reader = new AnnotatedBeanDefinitionReader(beanFactory);
 
-    reader.register(annotationClasses);
+    reader.loadBeanDefinitions(annotationClasses);
 
     if (basePackages.length > 0) {
       ClasspathBeanDefinitionScanner scanner = new ClasspathBeanDefinitionScanner(beanFactory);
