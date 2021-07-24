@@ -43,32 +43,32 @@ public class LegacyRequestMapping implements HandlerMapping {
     /*
      * dao
      */
-    var userDao = new JdbcUserDao();
-    var questionDao = new JdbcQuestionDao();
-    var answerDao = new JdbcAnswerDao();
+//    var userDao = new JdbcUserDao();
+//    var questionDao = new JdbcQuestionDao();
+//    var answerDao = new JdbcAnswerDao();
 
     /*
      * service
      */
-    var questionService = new QuestionService(questionDao, answerDao);
+//    var questionService = new QuestionService(questionDao, answerDao);
 
     // home
-    mappings.put("/", new HomeController(questionDao));
+//    mappings.put("/", new HomeController(questionDao));
 
     // qna
-    mappings.put("/qna/form", new AddQuestionController(questionDao));
-    mappings.put("/qna/show", new ShowController(questionDao, answerDao));
-    mappings.put("/qna/updateForm", new UpdateQuestionController(userDao, questionDao));
-    mappings.put("/qna/remove", new RemoveQuestionController(questionService));
+//    mappings.put("/qna/form", new AddQuestionController(questionDao));
+//    mappings.put("/qna/show", new ShowController(questionDao, answerDao));
+//    mappings.put("/qna/updateForm", new UpdateQuestionController(userDao, questionDao));
+//    mappings.put("/qna/remove", new RemoveQuestionController(questionService));
 
     /*
      * api
      */
     // qna
-    mappings.put("/api/qna/list", new QnaListController(questionDao));
-    mappings.put("/api/qna/addAnswer", new AddAnswerController(answerDao, questionDao));
-    mappings.put("/api/qna/removeAnswer", new RemoveAnswerController(answerDao, questionDao));
-    mappings.put("/api/qna/remove", new ApiRemoveQuestionController(questionService));
+//    mappings.put("/api/qna/list", new QnaListController(questionDao));
+//    mappings.put("/api/qna/addAnswer", new AddAnswerController(answerDao, questionDao));
+//    mappings.put("/api/qna/removeAnswer", new RemoveAnswerController(answerDao, questionDao));
+//    mappings.put("/api/qna/remove", new ApiRemoveQuestionController(questionService));
   }
 
   @Override

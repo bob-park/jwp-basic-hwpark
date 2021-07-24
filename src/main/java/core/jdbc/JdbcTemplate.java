@@ -2,25 +2,21 @@ package core.jdbc;
 
 import core.jdbc.exception.DataAccessException;
 
+import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 import static org.apache.commons.lang3.ObjectUtils.isNotEmpty;
 
 public class JdbcTemplate {
 
-  private static JdbcTemplate instance;
+  private final DataSource dataSource;
 
-  public static JdbcTemplate getInstance() {
-
-    if (isEmpty(instance)) {
-      instance = new JdbcTemplate();
-    }
-
-    return instance;
+  public JdbcTemplate(DataSource dataSource) {
+    this.dataSource = dataSource;
   }
 
   public void update(String sql, Object... params) {
@@ -29,7 +25,7 @@ public class JdbcTemplate {
   }
 
   public void update(String sql, KeyHolder keyHolder, Object... params) {
-    try (var conn = ConnectionManager.getConnection();
+    try (var conn = getConnection();
         var statement = conn.prepareStatement(sql)) {
 
       var index = 1;
@@ -61,7 +57,7 @@ public class JdbcTemplate {
 
     List<T> result = new ArrayList<>();
 
-    try (var conn = ConnectionManager.getConnection();
+    try (var conn = getConnection();
         var statement = conn.prepareStatement(sql)) {
 
       if (params != null) {
@@ -89,7 +85,7 @@ public class JdbcTemplate {
   }
 
   public <T> T queryForObject(String sql, Object[] params, RowMapper<T> mapper) {
-    try (var conn = ConnectionManager.getConnection();
+    try (var conn = getConnection();
         var statement = conn.prepareStatement(sql)) {
 
       if (params != null) {
@@ -110,5 +106,9 @@ public class JdbcTemplate {
     }
 
     return null;
+  }
+
+  private Connection getConnection() throws SQLException {
+    return this.dataSource.getConnection();
   }
 }

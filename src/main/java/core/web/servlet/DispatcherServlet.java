@@ -1,15 +1,15 @@
-package core.nmvc;
+package core.web.servlet;
 
 import com.google.common.collect.Lists;
-import core.mvc.ControllerHandlerAdapter;
-import core.mvc.LegacyRequestMapping;
 import core.mvc.view.ModelAndView;
 import core.mvc.view.View;
+import core.nmvc.HandlerAdapter;
+import core.nmvc.HandlerExecutionHandlerAdapter;
+import core.nmvc.HandlerMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +19,6 @@ import java.util.List;
 import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 import static org.apache.commons.lang3.ObjectUtils.isNotEmpty;
 
-@WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -27,18 +26,16 @@ public class DispatcherServlet extends HttpServlet {
   private final List<HandlerMapping> mappings = Lists.newArrayList();
   private final List<HandlerAdapter> handlerAdapters = Lists.newArrayList();
 
+  private final HandlerMapping hm;
+
+  public DispatcherServlet(HandlerMapping hm) {
+    this.hm = hm;
+  }
+
   @Override
   public void init() throws ServletException {
-    LegacyRequestMapping lhm = new LegacyRequestMapping();
-    lhm.initMapping();
+    mappings.add(hm);
 
-    AnnotationHandlerMapping ahm = new AnnotationHandlerMapping();
-    ahm.initialize();
-
-    mappings.add(lhm);
-    mappings.add(ahm);
-
-    handlerAdapters.add(new ControllerHandlerAdapter());
     handlerAdapters.add(new HandlerExecutionHandlerAdapter());
   }
 

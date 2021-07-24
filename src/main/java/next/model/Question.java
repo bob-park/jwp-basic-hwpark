@@ -1,6 +1,7 @@
 package next.model;
 
 import next.exception.CannotDeleteException;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -113,5 +114,15 @@ public class Question {
     }
 
     return true;
+  }
+
+  public boolean isSameWriter(User user) {
+    return StringUtils.equals(writer, user.getUserId());
+  }
+
+  public void update(Question newQuestion) {
+    this.writer = newQuestion.getWriter();
+    this.title = newQuestion.getTitle();
+    this.contents = newQuestion.getContents();
   }
 }

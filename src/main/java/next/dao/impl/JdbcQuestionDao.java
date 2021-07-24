@@ -1,5 +1,6 @@
 package next.dao.impl;
 
+import core.annotation.Inject;
 import core.annotation.Repository;
 import core.jdbc.JdbcTemplate;
 import core.jdbc.KeyHolder;
@@ -13,7 +14,12 @@ import java.util.List;
 @Repository
 public class JdbcQuestionDao implements QuestionDao {
 
-  private final JdbcTemplate template = JdbcTemplate.getInstance();
+  private final JdbcTemplate template;
+
+  @Inject
+  public JdbcQuestionDao(JdbcTemplate template) {
+    this.template = template;
+  }
 
   private static final RowMapper<Question> QUESTION_ROW_MAPPER =
       rs ->

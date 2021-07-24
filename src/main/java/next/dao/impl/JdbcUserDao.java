@@ -1,5 +1,6 @@
 package next.dao.impl;
 
+import core.annotation.Inject;
 import core.annotation.Repository;
 import core.jdbc.JdbcTemplate;
 import core.jdbc.RowMapper;
@@ -11,7 +12,12 @@ import java.util.List;
 @Repository
 public class JdbcUserDao implements UserDao {
 
-  private final JdbcTemplate template = JdbcTemplate.getInstance();
+  private final JdbcTemplate template;
+
+  @Inject
+  public JdbcUserDao(JdbcTemplate template) {
+    this.template = template;
+  }
 
   private static final RowMapper<User> MAPPER =
       rs ->
