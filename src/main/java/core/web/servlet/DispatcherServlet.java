@@ -3,7 +3,6 @@ package core.web.servlet;
 import com.google.common.collect.Lists;
 import core.mvc.view.ModelAndView;
 import core.mvc.view.View;
-import core.nmvc.AnnotationHandlerMapping;
 import core.nmvc.HandlerAdapter;
 import core.nmvc.HandlerExecutionHandlerAdapter;
 import core.nmvc.HandlerMapping;
@@ -27,12 +26,6 @@ public class DispatcherServlet extends HttpServlet {
   private final List<HandlerMapping> mappings = Lists.newArrayList();
   private final List<HandlerAdapter> handlerAdapters = Lists.newArrayList();
 
-  //  private final Object[] basePackages;
-
-  //  public DispatcherServlet(Object... basePackages) {
-  //    this.basePackages = basePackages;
-  //  }
-
   private final HandlerMapping hm;
 
   public DispatcherServlet(HandlerMapping hm) {
@@ -41,9 +34,6 @@ public class DispatcherServlet extends HttpServlet {
 
   @Override
   public void init() throws ServletException {
-    //    AnnotationHandlerMapping ahm = new AnnotationHandlerMapping(basePackages);
-    //    ahm.initialize();
-
     mappings.add(hm);
 
     handlerAdapters.add(new HandlerExecutionHandlerAdapter());
