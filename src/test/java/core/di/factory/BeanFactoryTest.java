@@ -1,12 +1,14 @@
 package core.di.factory;
 
 import com.google.common.collect.Sets;
+import core.annotation.Component;
 import core.annotation.Controller;
 import core.annotation.Repository;
 import core.annotation.Service;
 import core.di.BeanFactory;
 import core.di.factory.example.MyQnaService;
 import core.di.factory.example.QnaController;
+import core.nmvc.scan.ClasspathBeanDefinitionScanner;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.reflections.Reflections;
@@ -24,9 +26,14 @@ class BeanFactoryTest {
   @SuppressWarnings("unchecked")
   void setup() {
     reflections = new Reflections("core.di.factory.example");
-    Set<Class<?>> preInstantiateClazz =
-        getTypesAnnotatedWith(Controller.class, Service.class, Repository.class);
+
     beanFactory = new BeanFactory();
+
+    ClasspathBeanDefinitionScanner scanner = new ClasspathBeanDefinitionScanner(beanFactory);
+
+    scanner.doScan("core.di.factory.example");
+
+
     beanFactory.initialize();
   }
 

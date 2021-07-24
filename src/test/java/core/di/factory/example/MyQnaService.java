@@ -3,7 +3,7 @@ package core.di.factory.example;
 import core.annotation.Inject;
 import core.annotation.Service;
 
-@Service
+//@Service
 public class MyQnaService {
   private final UserRepository userRepository;
   private final QuestionRepository questionRepository;

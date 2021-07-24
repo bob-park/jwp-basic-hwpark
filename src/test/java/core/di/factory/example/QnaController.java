@@ -9,7 +9,7 @@ import core.annotation.RequestMapping;
 import core.mvc.view.ModelAndView;
 import core.nmvc.AbstractNewController;
 
-@Controller
+//@Controller
 public class QnaController extends AbstractNewController {
   private final MyQnaService qnaService;
 
