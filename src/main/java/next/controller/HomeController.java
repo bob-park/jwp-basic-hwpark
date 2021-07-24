@@ -1,24 +1,30 @@
 package next.controller;
 
-import core.mvc.AbstractController;
+import core.annotation.Controller;
+import core.annotation.Inject;
+import core.annotation.RequestMapping;
+import core.annotation.RequestMethod;
 import core.mvc.view.ModelAndView;
-import next.dao.impl.JdbcQuestionDao;
+import core.nmvc.AbstractNewController;
+import next.dao.QuestionDao;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class HomeController extends AbstractController {
+@Controller
+public class HomeController extends AbstractNewController {
 
-  private final JdbcQuestionDao jdbcQuestionDao;
+  private final QuestionDao questionDao;
 
-  public HomeController(JdbcQuestionDao jdbcQuestionDao) {
-    this.jdbcQuestionDao = jdbcQuestionDao;
+  @Inject
+  public HomeController(QuestionDao questionDao) {
+    this.questionDao = questionDao;
   }
 
-  @Override
+  @RequestMapping(value = "/", method = RequestMethod.GET)
   public ModelAndView execute(HttpServletRequest request, HttpServletResponse response)
       throws IOException {
-    return jspView("/home.jsp").addObject("questions", jdbcQuestionDao.findAll());
+    return jspView("/home.jsp").addObject("questions", questionDao.findAll());
   }
 }

@@ -1,5 +1,7 @@
 package next.service.qna;
 
+import core.annotation.Inject;
+import core.annotation.Service;
 import next.dao.AnswerDao;
 import next.dao.QuestionDao;
 import next.exception.CannotDeleteException;
@@ -9,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 
+@Service
 public class QuestionService {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -16,6 +19,7 @@ public class QuestionService {
   private final QuestionDao questionDao;
   private final AnswerDao answerDao;
 
+  @Inject
   public QuestionService(QuestionDao questionDao, AnswerDao answerDao) {
     this.answerDao = answerDao;
     this.questionDao = questionDao;
