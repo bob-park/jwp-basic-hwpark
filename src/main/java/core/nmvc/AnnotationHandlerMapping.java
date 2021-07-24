@@ -5,9 +5,7 @@ import com.google.common.collect.Sets;
 import core.annotation.Controller;
 import core.annotation.RequestMapping;
 import core.annotation.RequestMethod;
-import core.di.BeanFactory;
 import core.nmvc.context.ApplicationContext;
-import core.nmvc.scan.ClasspathBeanDefinitionScanner;
 import org.reflections.ReflectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,17 +20,15 @@ public class AnnotationHandlerMapping implements HandlerMapping {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
-  private final Object[] basePackage;
+  private final ApplicationContext context;
 
   private final Map<HandlerKey, HandlerExecution> handlerExecutions = Maps.newHashMap();
 
-  public AnnotationHandlerMapping(Object... basePackage) {
-    this.basePackage = basePackage;
+  public AnnotationHandlerMapping(ApplicationContext context) {
+    this.context = context;
   }
 
   public void initialize() {
-
-    ApplicationContext context = new ApplicationContext(basePackage);
 
     Map<Class<?>, Object> controllers = getControllers(context);
 
