@@ -24,7 +24,7 @@ class JdbcUserDaoTest {
     populator.addScript(new ClassPathResource("jwp.sql"));
     DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
 
-    jdbcTemplate = new JdbcTemplate();
+    jdbcTemplate = new JdbcTemplate(ConnectionManager.getDataSource());
   }
 
   @Test
