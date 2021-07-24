@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.google.common.collect.Sets;
 
+import core.annotation.Bean;
 import core.annotation.Inject;
 
 import static org.reflections.ReflectionUtils.*;
@@ -38,6 +39,11 @@ public class BeanFactoryUtils {
   @SuppressWarnings("unchecked")
   public static Set<Method> getInjectedMethod(Class<?> clazz) {
     return getAllMethods(clazz, withAnnotation(Inject.class));
+  }
+
+  @SuppressWarnings("unchecked")
+  public static Set<Method> getBeanMethods(Class<?> clazz) {
+    return getAllMethods(clazz, withAnnotation(Bean.class));
   }
 
   /**
