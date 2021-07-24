@@ -57,7 +57,7 @@ public class JdbcTemplate {
 
     List<T> result = new ArrayList<>();
 
-    try (var conn = ConnectionManager.getConnection();
+    try (var conn = getConnection();
         var statement = conn.prepareStatement(sql)) {
 
       if (params != null) {
@@ -85,7 +85,7 @@ public class JdbcTemplate {
   }
 
   public <T> T queryForObject(String sql, Object[] params, RowMapper<T> mapper) {
-    try (var conn = ConnectionManager.getConnection();
+    try (var conn = getConnection();
         var statement = conn.prepareStatement(sql)) {
 
       if (params != null) {

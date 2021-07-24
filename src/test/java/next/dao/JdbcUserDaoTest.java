@@ -1,6 +1,5 @@
 package next.dao;
 
-import core.jdbc.ConnectionManager;
 import core.jdbc.JdbcTemplate;
 import next.dao.impl.JdbcUserDao;
 import next.model.User;
@@ -22,9 +21,9 @@ class JdbcUserDaoTest {
   void setup() {
     ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
     populator.addScript(new ClassPathResource("jwp.sql"));
-    DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
+//    DatabasePopulatorUtils.execute(populator, ConnectionManager.getDataSource());
 
-    jdbcTemplate = new JdbcTemplate(ConnectionManager.getDataSource());
+//    jdbcTemplate = new JdbcTemplate(ConnectionManager.getDataSource());
   }
 
   @Test
